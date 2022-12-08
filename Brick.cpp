@@ -42,8 +42,41 @@ float Brick::getBrickWidth()
 	return m_brickWidth;
 }
 
+float Brick::getXPos()
+{
+	return m_brick.getPosition().x;
+}
+
+float Brick::getYPos()
+{
+	return m_brick.getPosition().y;
+}
+
 void Brick::getBrickPosition() const
 {
 	std::cout << "X : " << m_brick.getPosition().x << ", Y : " << m_brick.getPosition().y << std::endl;
-	std::cout << m_brick.getGlobalBounds().top << std::endl;
+}
+
+Player::Player(float width, float height)
+{
+	m_brickWidth = width;
+	m_brickHeight = height;
+	m_brick.setSize(Vector2f(width, height));
+	m_brick.setOrigin(width / 2, height / 2);
+	m_brick.setFillColor(Color(255, 0, 0));
+	m_healthPoints = 1;
+	m_playerSpeed = 4;
+}
+
+void Player::movePlayer(std::string direction)
+{
+	if (direction == "right")
+	{
+		m_brick.move(m_playerSpeed, 0);
+	}
+
+	if (direction == "left")
+	{
+		m_brick.move(-m_playerSpeed, 0);
+	}
 }

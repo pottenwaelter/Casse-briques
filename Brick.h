@@ -2,6 +2,7 @@
 #define BRICK_H
 
 #include <SFML/Graphics.hpp>
+#include <string>
 
 using namespace sf;
 
@@ -15,6 +16,8 @@ public:
 	void setBrickHealthPoints(int hp);
 	float getBrickWidth();
 	float getBrickHeight();
+	float getXPos();
+	float getYPos();
 	void getBrickPosition() const;
 protected: // en prévision de classe fille
 	virtual void draw(RenderTarget& target, RenderStates states) const
@@ -29,7 +32,12 @@ protected: // en prévision de classe fille
 
 class Player : public Brick
 {
+public:
+	Player(float width, float height);
+	void movePlayer(std::string direction);
 
+private:
+	float m_playerSpeed;
 };
 
 #endif // !BRICK_H

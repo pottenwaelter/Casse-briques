@@ -2,8 +2,8 @@
 
 int main()
 {
-    RenderWindow window(VideoMode(1200, 720), "Casse-briques");
     window.setFramerateLimit(60);
+    //Placement des briques
     for (int j = 0; j < 4; j++)
     {
         for (int i = 0; i < 6; i++)
@@ -17,6 +17,8 @@ int main()
             bricks[i + j * 6].getBrickPosition();
         }
     }
+    //Placement du joueur
+    player.setBrickPosition(1200 / 2, 720-30);
 
     while (window.isOpen())
     {
@@ -25,15 +27,43 @@ int main()
         {
             if (event.type == Event::Closed)
                 window.close();
+            input.inputHandler(event, window);
         }
+
+        checkInput();
 
         window.clear();
         for (int i = 0; i < 24; i++)
         {
             window.draw(bricks[i]);
         }
+        window.draw(player);
         window.display();
     }
 
     return 0;
+}
+
+void checkInput()
+{
+    if (player.getXPos() > 75)
+    {
+        if (input.getKey().left == true)
+        {
+            player.movePlayer("left");
+        }
+    }
+
+    if (player.getXPos() < 1200 - 75)
+    {
+        if (input.getKey().right == true)
+        {
+            player.movePlayer("right");
+        }
+    }
+
+    if (input.getKey().escape == true)
+    {
+        window.close();
+    }
 }
