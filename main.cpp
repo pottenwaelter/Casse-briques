@@ -18,9 +18,18 @@ int main()
             bricks[i + j * 6].getBrickPosition();
         }
     }
+
     //Placement du joueur
     player.setBrickPosition(WIN_WIDTH / 2, WIN_HEIGHT - 30);
     cout << getBrickSpacing() << endl;
+
+    //Initialisation et placement de la balle
+    ball.setFillColor(Color::Green);
+    ball.setOutlineThickness(1);
+    ball.setOutlineColor(Color::White);
+    ball.setRadius(16.f);
+    ball.setOrigin(16, 16);
+    ball.setPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 
     while (window.isOpen())
     {
@@ -40,6 +49,7 @@ int main()
             window.draw(bricks[i]);
         }
         window.draw(player);
+        window.draw(ball);
         window.display();
     }
 

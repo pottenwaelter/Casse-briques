@@ -28,6 +28,8 @@ void Input::inputHandler(Event event, RenderWindow& window)
 		case Keyboard::Enter:
 			key.start = true;
 			break;
+		case Keyboard::Space:
+			key.space = true;
 		default:
 			break;
 		}
@@ -49,6 +51,8 @@ void Input::inputHandler(Event event, RenderWindow& window)
 		case Keyboard::Enter:
 			key.start = false;
 			break;
+		case Keyboard::Space:
+			key.space = false;
 		default:
 			break;
 		}
