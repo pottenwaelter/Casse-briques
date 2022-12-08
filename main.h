@@ -7,11 +7,19 @@
 using namespace std;
 using namespace sf;
 
+//Constantes
+const int WIN_WIDTH = 1200;
+const int WIN_HEIGHT = 720;
+
 //Variables globales
+float playerWidth = 150;
+float playerHeight = 20;
 Brick bricks[24];
-Player player(150, 20);
+Player player(playerWidth, playerHeight);
 Input input;
-RenderWindow window(VideoMode(1200, 720), "Casse-briques");
+RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
+
+
 
 //Prototypes de fonctions
 void checkInput();

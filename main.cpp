@@ -18,7 +18,7 @@ int main()
         }
     }
     //Placement du joueur
-    player.setBrickPosition(1200 / 2, 720-30);
+    player.setBrickPosition(WIN_WIDTH / 2, WIN_HEIGHT - 30);
 
     while (window.isOpen())
     {
@@ -46,7 +46,7 @@ int main()
 
 void checkInput()
 {
-    if (player.getXPos() > 75)
+    if (player.getXPos() > playerWidth / 2)
     {
         if (input.getKey().left == true)
         {
@@ -54,7 +54,7 @@ void checkInput()
         }
     }
 
-    if (player.getXPos() < 1200 - 75)
+    if (player.getXPos() < WIN_WIDTH - playerWidth / 2)
     {
         if (input.getKey().right == true)
         {
