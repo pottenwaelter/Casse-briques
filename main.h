@@ -23,3 +23,4 @@ RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
 
 //Prototypes de fonctions
 void checkInput();
+float getBrickSpacing();

@@ -9,6 +9,7 @@ Brick::Brick()
 	m_brick.setFillColor(Color(175, 175, 175));
 	m_brick.setOutlineThickness(2);
 	m_brick.setOutlineColor(Color(75, 75, 75));
+	m_hitbox = m_brick.getGlobalBounds();
 	m_healthPoints = 1;
 }
 
@@ -56,6 +57,9 @@ void Brick::getBrickPosition() const
 {
 	std::cout << "X : " << m_brick.getPosition().x << ", Y : " << m_brick.getPosition().y << std::endl;
 }
+
+
+
 
 Player::Player(float width, float height)
 {

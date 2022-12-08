@@ -3,6 +3,7 @@
 int main()
 {
     window.setFramerateLimit(60);
+    float xSpacing = getBrickSpacing();
     //Placement des briques
     for (int j = 0; j < 4; j++)
     {
@@ -13,12 +14,13 @@ int main()
             A la fin du premier passage sur les i, on sera à l'indice 5 et on reprend avec i = 0, donc i + j * 6 => 0 + 6 puisque j s'incrémente à 1
             Ce qui fait que ça boucle correctement et les blocs sont bien placés
             */
-            bricks[i + j * 6].setBrickPosition((20 + i * bricks[i].getBrickWidth()), (20 + j * bricks[i].getBrickHeight()));
+            bricks[i + j * 6].setBrickPosition((xSpacing + i * bricks[i].getBrickWidth()), (100 + j * bricks[i].getBrickHeight()));
             bricks[i + j * 6].getBrickPosition();
         }
     }
     //Placement du joueur
     player.setBrickPosition(WIN_WIDTH / 2, WIN_HEIGHT - 30);
+    cout << getBrickSpacing() << endl;
 
     while (window.isOpen())
     {
@@ -66,4 +68,12 @@ void checkInput()
     {
         window.close();
     }
+}
+
+float getBrickSpacing()
+{
+    float totalWidth = 150 * 6; // largeur totale du rectangle de l'ensemble des briques
+    float spacing = (WIN_WIDTH - totalWidth) / 2;
+
+    return spacing;
 }
