@@ -2,7 +2,7 @@
 
 Input::Input()
 {
-	key.left = key.right = key.start = key.escape = false;
+	key.left = key.right = key.start = key.escape = key.backspace = key.space = false;
 }
 
 Input::KeyboardKey Input::getKey() const
@@ -30,6 +30,10 @@ void Input::inputHandler(Event event, RenderWindow& window)
 			break;
 		case Keyboard::Space:
 			key.space = true;
+			break;
+		case Keyboard::Backspace:
+			key.backspace = true;
+			break;
 		default:
 			break;
 		}
@@ -53,6 +57,10 @@ void Input::inputHandler(Event event, RenderWindow& window)
 			break;
 		case Keyboard::Space:
 			key.space = false;
+			break;
+		case Keyboard::Backspace:
+			key.backspace = false;
+			break;
 		default:
 			break;
 		}
