@@ -25,8 +25,8 @@ int main()
     ball.setFillColor(Color::Green);
     ball.setOutlineThickness(1);
     ball.setOutlineColor(Color::White);
-    ball.setRadius(16.f);
-    ball.setOrigin(16, 16);
+    ball.setRadius(ballRadius);
+    ball.setOrigin(ballRadius, ballRadius);
     ball.setPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 
     //Définition des 3 différentes hitboxes du joueur
@@ -148,12 +148,12 @@ void ballMovement()
 {
     ballHitbox = ball.getGlobalBounds();
     ball.move(xBallSpeed, -yBallSpeed);
-    if (ball.getPosition().x < 1 || ball.getPosition().x >= WIN_WIDTH)
+    if (ball.getPosition().x < 1 + ballRadius || ball.getPosition().x >= WIN_WIDTH - ballRadius)
     {
         xBallSpeed *= -1;
     }
 
-    if (ball.getPosition().y < 1 || ball.getPosition().y >= WIN_HEIGHT)
+    if (ball.getPosition().y < 1 + ballRadius || ball.getPosition().y >= WIN_HEIGHT - ballRadius)
     {
         yBallSpeed *= -1;
     }

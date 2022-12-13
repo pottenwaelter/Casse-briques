@@ -12,8 +12,9 @@ const int WIN_WIDTH = 1200;
 const int WIN_HEIGHT = 720;
 
 //Variables globales
-float playerWidth = 150;
-float playerHeight = 20;
+float playerWidth = 150.f;
+float ballRadius = 16.f;
+float playerHeight = 20.f;
 float xBallSpeed = 3.f;
 float yBallSpeed = 3.f;
 bool hasGameStarted = false;
