@@ -91,9 +91,6 @@ void checkInput()
         if (input.getKey().left == true)
         {
             player.movePlayer("left"); 
-            /*playerRects[0].setPosition(player.getXPos() - playerWidth / 2, player.getYPos() - playerHeight / 2);
-            playerRects[1].setPosition(playerRects[0].getPosition().x + 65, playerRects[0].getPosition().y);
-            playerRects[2].setPosition(playerRects[1].getPosition().x + 20, playerRects[1].getPosition().y);*/
             for (int i = 0; i < 3; i++)
             {
                 playerRects[i].move(-4, 0);
@@ -106,9 +103,6 @@ void checkInput()
         if (input.getKey().right == true)
         {
             player.movePlayer("right");
-            /*playerRects[0].setPosition(player.getXPos() - playerWidth / 2, player.getYPos() - playerHeight / 2);
-            playerRects[1].setPosition(playerRects[0].getPosition().x + 65, playerRects[0].getPosition().y);
-            playerRects[2].setPosition(playerRects[1].getPosition().x + 20, playerRects[1].getPosition().y);*/
             for (int i = 0; i < 3; i++)
             {
                 playerRects[i].move(4, 0);
