@@ -17,8 +17,8 @@ float ballRadius = 16.f;
 float playerHeight = 20.f;
 float xBallSpeed = 3.f;
 float yBallSpeed = 3.f;
+float playerSpeed = 4.f;
 bool hasGameStarted = false;
-bool checkPlayerHitbox = false;
 bool hasCollided = false;
 Clock collisionClock;
 
@@ -29,9 +29,6 @@ Brick bricks[24];
 Player player(playerWidth, playerHeight);
 Input input;
 RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
-//Préparation des hitboxes du joueur
-RectangleShape playerRects[3];
-FloatRect playerHitboxes[3];
 
 
 

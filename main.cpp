@@ -27,20 +27,7 @@ int main()
     ball.setOutlineColor(Color::White);
     ball.setRadius(ballRadius);
     ball.setOrigin(ballRadius, ballRadius);
-    ball.setPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
-
-    //Définition des 3 différentes hitboxes du joueur
-    playerRects[0].setSize(Vector2f(65, 20));
-    playerRects[0].setPosition(player.getXPos() - playerWidth / 2, player.getYPos() - playerHeight / 2);
-    playerRects[0].setFillColor(Color::White);
-
-    playerRects[1].setSize(Vector2f(20, 20));
-    playerRects[1].setPosition(playerRects[0].getPosition().x + 65, playerRects[0].getPosition().y);
-    playerRects[1].setFillColor(Color::White);
-
-    playerRects[2].setSize(Vector2f(65, 20));
-    playerRects[2].setPosition(playerRects[1].getPosition().x + 20, playerRects[1].getPosition().y);
-    playerRects[2].setFillColor(Color::White);
+    ball.setPosition(WIN_WIDTH / 2, player.getYPos() - playerHeight - ballRadius / 2 - 3);
 
     while (window.isOpen())
     {
@@ -52,10 +39,6 @@ int main()
             input.inputHandler(event, window);
         }
 
-        for (int i = 0; i < 3; i++)
-        {
-            playerHitboxes[i] = playerRects[i].getGlobalBounds();
-        }
         checkInput();
         if (hasGameStarted)
         {
@@ -65,18 +48,14 @@ int main()
         window.clear();
         for (int i = 0; i < 24; i++)
         {
-            window.draw(bricks[i]);
+            if (bricks[i].getHealthPoints() > 0)
+            {
+                window.draw(bricks[i]);
+            }
         }
         window.draw(player);
         window.draw(ball);
-        if (checkPlayerHitbox)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                window.draw(playerRects[i]);
-            }
-        }
-        //cout << playerHitboxes[0].left << endl;
+    
         //cout << ballHitbox.left << endl;
         window.display();
     }
@@ -90,10 +69,10 @@ void checkInput()
     {
         if (input.getKey().left == true)
         {
-            player.movePlayer("left"); 
-            for (int i = 0; i < 3; i++)
+            player.movePlayer("left");
+            if (!hasGameStarted)
             {
-                playerRects[i].move(-4, 0);
+                ball.move(-playerSpeed, 0);
             }
         }
     }
@@ -103,9 +82,9 @@ void checkInput()
         if (input.getKey().right == true)
         {
             player.movePlayer("right");
-            for (int i = 0; i < 3; i++)
+            if (!hasGameStarted)
             {
-                playerRects[i].move(4, 0);
+                ball.move(playerSpeed, 0);
             }
         }
     }
@@ -113,15 +92,6 @@ void checkInput()
     if (input.getKey().space == true)
     {
         hasGameStarted = true;
-    }
-
-    if (input.getKey().backspace == true)
-    {
-        checkPlayerHitbox = true;
-    }
-    else
-    {
-        checkPlayerHitbox = false;
     }
 
     if (input.getKey().escape == true)
@@ -156,33 +126,26 @@ void ballMovement()
 
     if (!hasCollided)
     {
-        if (ballHitbox.intersects(playerHitboxes[0]))
+        if (ballHitbox.intersects(player.getHitbox()))
         {
-            cout << "Collision gauche" << endl;
             yBallSpeed *= -1;
             hasCollided = true;
             collisionClock.restart();
         }
 
-        if (ballHitbox.intersects(playerHitboxes[1]))
+        /*for (int i = 0; i < 24; i++)
         {
-            cout << "Collision milieu" << endl;
-            yBallSpeed *= -1;
-            xBallSpeed /= 4;
-            hasCollided = true;
-            collisionClock.restart();
-        }
-
-        if (ballHitbox.intersects(playerHitboxes[2]))
-        {
-            cout << "Collision droite" << endl;
-            yBallSpeed *= -1;
-            hasCollided = true;
-            collisionClock.restart();
-        }
+            if (ballHitbox.intersects(bricks[i].getHitbox()))
+            {
+                bricks[i].brickGetsHit();
+                yBallSpeed *= -1;
+                hasCollided = true;
+                collisionClock.restart();
+            }
+        }*/
     }
 
-    if (collisionClock.getElapsedTime().asSeconds() > 0.5 && hasCollided)
+    if (collisionClock.getElapsedTime().asSeconds() > 0.1 && hasCollided)
     {
         hasCollided = false;
     }

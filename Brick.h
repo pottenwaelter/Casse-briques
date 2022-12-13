@@ -18,7 +18,7 @@ public:
 	float getBrickHeight();
 	float getXPos();
 	float getYPos();
-	
+	FloatRect getHitbox();
 	void getBrickPosition() const;
 protected: // en prévision de classe fille
 	virtual void draw(RenderTarget& target, RenderStates states) const
@@ -29,7 +29,6 @@ protected: // en prévision de classe fille
 	float m_brickWidth;
 	float m_brickHeight;
 	RectangleShape m_brick;
-	FloatRect m_hitbox;
 };
 
 class Player : public Brick
