@@ -1,4 +1,4 @@
-Classic brick breaker game in C++/SFML
+#Classic brick breaker game in C++/SFML
 
 //TOFIX
 - Brick texture popping out when another brick gets destroyed
