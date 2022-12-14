@@ -20,6 +20,7 @@ public:
 	float getYPos();
 	FloatRect getHitbox();
 	void getBrickPosition() const;
+	~Brick();
 protected: // en prévision de classe fille
 	virtual void draw(RenderTarget& target, RenderStates states) const
 	{

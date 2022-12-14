@@ -25,7 +25,8 @@ Clock collisionClock;
 //Instances d'objets
 CircleShape ball;
 FloatRect ballHitbox;
-Brick bricks[24];
+//Brick bricks[24];
+vector<Brick> bricks(24);
 Player player(playerWidth, playerHeight);
 Input input;
 RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");

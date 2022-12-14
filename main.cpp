@@ -14,9 +14,12 @@ int main()
             A la fin du premier passage sur les i, on sera à l'indice 5 et on reprend avec i = 0, donc i + j * 6 => 0 + 6 puisque j s'incrémente à 1
             Ce qui fait que ça boucle correctement et les blocs sont bien placés
             */
-            bricks[i + j * 6].setBrickPosition((xSpacing + i * bricks[i].getBrickWidth()), (100 + j * bricks[i].getBrickHeight()));
+            // 2*i et 2*j à la fin des paramètres pour prendre en compte la propriété outlinethickness de chaque brique
+            bricks[i + j * 6].setBrickPosition((xSpacing + i * bricks[i].getBrickWidth() + 2 * i), (100 + j * bricks[i].getBrickHeight() + 2 * j));
         }
     }
+
+    bricks.erase(bricks.begin() + 1);
 
     //Placement du joueur
     player.setBrickPosition(WIN_WIDTH / 2, WIN_HEIGHT - 30);
@@ -46,7 +49,7 @@ int main()
         }
 
         window.clear();
-        for (int i = 0; i < 24; i++)
+        for (int i = 0; i < bricks.size(); i++)
         {
             if (bricks[i].getHealthPoints() > 0)
             {
@@ -102,7 +105,7 @@ void checkInput()
 
 float getBrickSpacing()
 {
-    float totalWidth = 150 * 6; // largeur totale du rectangle de l'ensemble des briques
+    float totalWidth = bricks[0].getBrickWidth() * 6; // largeur totale du rectangle de l'ensemble des briques => 150 de largeur * le nombre de briques + 4 * 6 d'outline thickness
     float spacing = (WIN_WIDTH - totalWidth) / 2;
 
     return spacing;
