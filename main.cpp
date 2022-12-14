@@ -15,7 +15,7 @@ int main()
             Ce qui fait que ça boucle correctement et les blocs sont bien placés
             */
             // 2*i et 2*j à la fin des paramètres pour prendre en compte la propriété outlinethickness de chaque brique
-            bricks[i + j * 6].setBrickPosition((xSpacing + i * bricks[i].getBrickWidth() + 2 * i), (100 + j * bricks[i].getBrickHeight() + 2 * j));
+            bricks[i + j * 6].setBrickPosition((xSpacing + i * bricks[i].getBrickWidth()), (100 + j * bricks[i].getBrickHeight()) + 1);
         }
     }
 
@@ -23,6 +23,9 @@ int main()
     playerHeight = player.getBrickHeight();
     playerWidth = player.getBrickWidth();
     player.setBrickPosition(WIN_WIDTH / 2, WIN_HEIGHT - 30);
+
+    cout << "Largeur raquette : " << playerWidth << " Hauteur raquette : " << playerHeight << endl;
+    cout << "Origine x : " << player.getOrigin().x << " Origine y : " << player.getOrigin().y << endl;
 
     //Initialisation et placement de la balle
     ball.setFillColor(Color::Green);
@@ -117,7 +120,7 @@ void checkInput()
 
 float getBrickSpacing()
 {
-    float totalWidth = bricks[0].getBrickWidth() * 6; // largeur totale du rectangle de l'ensemble des briques => 150 de largeur * le nombre de briques + 4 * 6 d'outline thickness
+    float totalWidth = bricks[0].getBrickWidth() * 6; // largeur totale du rectangle de l'ensemble des briques
     float spacing = (WIN_WIDTH - totalWidth) / 2;
 
     return spacing;

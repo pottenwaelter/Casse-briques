@@ -10,15 +10,17 @@ class Brick : public Drawable
 {
 public:
 	Brick();
+	Brick(int xOffset, int yOffset, int width, int height, float scale);
 	void loadTexture(std::string text);
 	int getHealthPoints();
 	void brickGetsHit();
-	void setBrickPosition(int xPos, int yPos);
+	void setBrickPosition(float xPos, float yPos);
 	void setBrickHealthPoints(int hp);
 	float getBrickWidth();
 	float getBrickHeight();
 	float getXPos();
 	float getYPos();
+	Vector2f getOrigin();
 	FloatRect getHitbox();
 	void getBrickPosition() const;
 	~Brick();

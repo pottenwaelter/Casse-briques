@@ -14,7 +14,24 @@ Brick::Brick()
 	m_sprite.setScale(m_spriteScale, m_spriteScale);
 	m_brickWidth = m_spriteWidth * m_spriteScale;
 	m_brickHeight = m_spriteHeight * m_spriteScale;
-	m_sprite.setOrigin(Vector2f(m_brickWidth / 2, m_brickHeight / 2));
+	m_sprite.setOrigin(Vector2f(m_brickWidth / 2, m_brickHeight));
+	m_healthPoints = 1;
+}
+
+Brick::Brick(int xOffset, int yOffset, int width, int height, float scale)
+{
+	m_spriteHeight = height;
+	m_spriteWidth = width;
+	m_spriteScale = scale;
+	m_xOffset = xOffset;
+	m_yOffset = yOffset;
+	loadTexture("ressources/Breakout_Tile_Free.png");
+	m_sprite.setTexture(m_texture);
+	m_sprite.setTextureRect(IntRect(m_xOffset, m_yOffset, m_spriteWidth, m_spriteHeight));
+	m_sprite.setScale(m_spriteScale, m_spriteScale);
+	m_brickWidth = m_spriteWidth * m_spriteScale;
+	m_brickHeight = m_spriteHeight * m_spriteScale;
+	m_sprite.setOrigin(Vector2f(m_brickWidth, m_brickHeight));
 	m_healthPoints = 1;
 }
 
@@ -36,7 +53,7 @@ void Brick::brickGetsHit()
 	m_healthPoints--;
 }
 
-void Brick::setBrickPosition(int xPos, int yPos)
+void Brick::setBrickPosition(float xPos, float yPos)
 {
 	m_sprite.setPosition(xPos, yPos);
 }
@@ -66,6 +83,11 @@ float Brick::getYPos()
 	return m_sprite.getPosition().y;
 }
 
+Vector2f Brick::getOrigin()
+{
+	return m_sprite.getOrigin();
+}
+
 void Brick::getBrickPosition() const
 {
 	std::cout << "X : " << m_sprite.getPosition().x << ", Y : " << m_sprite.getPosition().y << std::endl;
@@ -81,19 +103,8 @@ Brick::~Brick()
 	std::cout << "Destruction" << std::endl;
 }
 
-Player::Player()
+Player::Player() : Brick(1158, 462, 243, 64, 0.5)
 {
-	m_spriteHeight = 64;
-	m_spriteWidth = 243;
-	m_spriteScale = 0.5;
-	m_xOffset = 1158;
-	m_yOffset = 462;
-	loadTexture("ressources/Breakout_Tile_Free.png");
-	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(IntRect(m_xOffset, m_yOffset, m_spriteWidth, m_spriteHeight));
-	m_sprite.setScale(m_spriteScale, m_spriteScale);
-	m_brickWidth = m_spriteWidth * m_spriteScale;
-	m_brickHeight = m_spriteHeight * m_spriteScale;
 	m_playerSpeed = 4;
 }
 
