@@ -1,7 +1,13 @@
 Classic brick breaker game in C++/SFML
 
+//TOFIX
+- Brick texture popping out when another brick gets destroyed
+- Some alignments problems
+
 //TODO
-- Ball movement management
+- Better ball movement
 - Make several levels
+- Add power-ups
 - Make different types of bricks with different health counts / looks
-- Make it pretty
+- Make it prettier
+- Add sound effects
