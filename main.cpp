@@ -19,9 +19,9 @@ int main()
         }
     }
 
-    bricks.erase(bricks.begin() + 1);
-
     //Placement du joueur
+    playerHeight = player.getBrickHeight();
+    playerWidth = player.getBrickWidth();
     player.setBrickPosition(WIN_WIDTH / 2, WIN_HEIGHT - 30);
 
     //Initialisation et placement de la balle
@@ -30,7 +30,7 @@ int main()
     ball.setOutlineColor(Color::White);
     ball.setRadius(ballRadius);
     ball.setOrigin(ballRadius, ballRadius);
-    ball.setPosition(WIN_WIDTH / 2, player.getYPos() - playerHeight - ballRadius / 2 - 3);
+    ball.setPosition(WIN_WIDTH / 2, player.getYPos() - playerHeight - ballRadius / 2 - 2);
 
     while (window.isOpen())
     {
@@ -58,8 +58,11 @@ int main()
         }
         window.draw(player);
         window.draw(ball);
+        if (isBackspacePressed)
+        {
+            window.draw(ballRect);
+        }
     
-        //cout << ballHitbox.left << endl;
         window.display();
     }
 
@@ -97,6 +100,15 @@ void checkInput()
         hasGameStarted = true;
     }
 
+    if (input.getKey().backspace == true)
+    {
+        isBackspacePressed = true;
+    }
+    else
+    {
+        isBackspacePressed = false;
+    }
+
     if (input.getKey().escape == true)
     {
         window.close();
@@ -114,6 +126,9 @@ float getBrickSpacing()
 void ballMovement()
 {
     ballHitbox = ball.getGlobalBounds();
+    ballRect.setSize(Vector2f(ballRadius * 2, ballRadius * 2));
+    ballRect.setPosition(ballHitbox.left, ballHitbox.top);
+    ballRect.setFillColor(Color(255, 0, 0, 150));
     ball.move(xBallSpeed, -yBallSpeed);
     if (ball.getPosition().x < 1 + ballRadius || ball.getPosition().x >= WIN_WIDTH - ballRadius)
     {
@@ -125,7 +140,9 @@ void ballMovement()
         yBallSpeed *= -1;
     }
 
-    //TODO : FIX THE WHOLE THING :-]
+    //TODO : IMPROVE HITBOXES
+    //Different behaviors if the ball hits the side or the corner of a brick
+    //Direction changes according to where the ball hits the player racket
 
     if (!hasCollided)
     {
@@ -136,19 +153,23 @@ void ballMovement()
             collisionClock.restart();
         }
 
-        /*for (int i = 0; i < 24; i++)
+        for (int i = 0; i < bricks.size(); i++)
         {
             if (ballHitbox.intersects(bricks[i].getHitbox()))
             {
                 bricks[i].brickGetsHit();
+                if (bricks[i].getHealthPoints() == 0)
+                {
+                    bricks.erase(bricks.begin() + i);
+                }
                 yBallSpeed *= -1;
                 hasCollided = true;
                 collisionClock.restart();
             }
-        }*/
+        }
     }
 
-    if (collisionClock.getElapsedTime().asSeconds() > 0.1 && hasCollided)
+    if (collisionClock.getElapsedTime().asSeconds() > 0.2 && hasCollided)
     {
         hasCollided = false;
     }

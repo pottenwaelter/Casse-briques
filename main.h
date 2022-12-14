@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
+#include <cmath>
 #include "Brick.h"
 #include "Input.h"
 
@@ -12,22 +13,25 @@ const int WIN_WIDTH = 1200;
 const int WIN_HEIGHT = 720;
 
 //Variables globales
-float playerWidth = 150.f;
-float ballRadius = 16.f;
-float playerHeight = 20.f;
-float xBallSpeed = 3.f;
-float yBallSpeed = 3.f;
+float playerWidth;
+float ballRadius = 12.f;
+float playerHeight;
+float xBallSpeed = 3.5;
+float yBallSpeed = 3.5;
 float playerSpeed = 4.f;
 bool hasGameStarted = false;
 bool hasCollided = false;
+bool isBackspacePressed = false;
 Clock collisionClock;
 
 //Instances d'objets
+Texture playerTexture;
+Sprite playerSprite;
 CircleShape ball;
+RectangleShape ballRect;
 FloatRect ballHitbox;
-//Brick bricks[24];
 vector<Brick> bricks(24);
-Player player(playerWidth, playerHeight);
+Player player;
 Input input;
 RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
 
