@@ -41,3 +41,4 @@ RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
 void checkInput();
 float getBrickSpacing();
 void ballMovement();
+void collisionManagement();

@@ -14,8 +14,7 @@ int main()
             A la fin du premier passage sur les i, on sera à l'indice 5 et on reprend avec i = 0, donc i + j * 6 => 0 + 6 puisque j s'incrémente à 1
             Ce qui fait que ça boucle correctement et les blocs sont bien placés
             */
-            // 2*i et 2*j à la fin des paramètres pour prendre en compte la propriété outlinethickness de chaque brique
-            bricks[i + j * 6].setBrickPosition((xSpacing + i * bricks[i].getBrickWidth()), (100 + j * bricks[i].getBrickHeight()) + 1);
+            bricks[i + j * 6].setBrickPosition((xSpacing + i * bricks[i].getBrickWidth()), (100 + j * bricks[i].getBrickHeight()));
         }
     }
 
@@ -24,8 +23,7 @@ int main()
     playerWidth = player.getBrickWidth();
     player.setBrickPosition(WIN_WIDTH / 2, WIN_HEIGHT - 30);
 
-    cout << "Largeur raquette : " << playerWidth << " Hauteur raquette : " << playerHeight << endl;
-    cout << "Origine x : " << player.getOrigin().x << " Origine y : " << player.getOrigin().y << endl;
+    cout << "\n" << xSpacing + 0 * bricks[0].getBrickWidth() << endl;
 
     //Initialisation et placement de la balle
     ball.setFillColor(Color::Green);
@@ -54,10 +52,7 @@ int main()
         window.clear();
         for (int i = 0; i < bricks.size(); i++)
         {
-            if (bricks[i].getHealthPoints() > 0)
-            {
-                window.draw(bricks[i]);
-            }
+                window.draw(bricks[i]); 
         }
         window.draw(player);
         window.draw(ball);
@@ -122,6 +117,9 @@ float getBrickSpacing()
 {
     float totalWidth = bricks[0].getBrickWidth() * 6; // largeur totale du rectangle de l'ensemble des briques
     float spacing = (WIN_WIDTH - totalWidth) / 2;
+    cout << "Largeur de toutes les briques : " << totalWidth << endl;
+    cout << "Espace gauche et droite : " << spacing << endl;
+    cout << "Largeur de la fenêtre : " << totalWidth + spacing * 2;
 
     return spacing;
 }
@@ -146,7 +144,11 @@ void ballMovement()
     //TODO : IMPROVE HITBOXES
     //Different behaviors if the ball hits the side or the corner of a brick
     //Direction changes according to where the ball hits the player racket
+    collisionManagement();
+}
 
+void collisionManagement()
+{
     if (!hasCollided)
     {
         if (ballHitbox.intersects(player.getHitbox()))

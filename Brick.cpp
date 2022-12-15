@@ -14,7 +14,6 @@ Brick::Brick()
 	m_sprite.setScale(m_spriteScale, m_spriteScale);
 	m_brickWidth = m_spriteWidth * m_spriteScale;
 	m_brickHeight = m_spriteHeight * m_spriteScale;
-	m_sprite.setOrigin(Vector2f(m_brickWidth / 2, m_brickHeight));
 	m_healthPoints = 1;
 }
 
@@ -81,6 +80,11 @@ float Brick::getXPos()
 float Brick::getYPos()
 {
 	return m_sprite.getPosition().y;
+}
+
+Vector2f Brick::getScale()
+{
+	return m_sprite.getScale();
 }
 
 Vector2f Brick::getOrigin()
