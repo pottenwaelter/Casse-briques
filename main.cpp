@@ -23,15 +23,17 @@ int main()
     playerWidth = player.getBrickWidth();
     player.setBrickPosition(WIN_WIDTH / 2, WIN_HEIGHT - 30);
 
-    cout << "\n" << xSpacing + 0 * bricks[0].getBrickWidth() << endl;
+    //Initialisation et placement du sprite de la balle
+    if (!ballTexture.loadFromFile("ressources/Breakout_Tile_Free.png"))
+    {
+        cout << "Erreur chargement texture balle" << endl;
+    }
+    ballSprite.setTexture(ballTexture);
+    ballSprite.setTextureRect(IntRect(1403, 652, ballSpriteSize, ballSpriteSize));
+    ballSprite.setScale(0.5, 0.5);
+    ballSprite.setOrigin(ballSpriteSize / 2, ballSpriteSize / 2);
+    ballSprite.setPosition(WIN_WIDTH / 2, player.getYPos() - playerHeight - 5);
 
-    //Initialisation et placement de la balle
-    ball.setFillColor(Color::Green);
-    ball.setOutlineThickness(1);
-    ball.setOutlineColor(Color::White);
-    ball.setRadius(ballRadius);
-    ball.setOrigin(ballRadius, ballRadius);
-    ball.setPosition(WIN_WIDTH / 2, player.getYPos() - playerHeight - ballRadius / 2 - 2);
 
     while (window.isOpen())
     {
@@ -55,7 +57,7 @@ int main()
                 window.draw(bricks[i]); 
         }
         window.draw(player);
-        window.draw(ball);
+        window.draw(ballSprite);
         if (isBackspacePressed)
         {
             window.draw(ballRect);
@@ -76,7 +78,7 @@ void checkInput()
             player.movePlayer("left");
             if (!hasGameStarted)
             {
-                ball.move(-playerSpeed, 0);
+                ballSprite.move(-playerSpeed, 0);
             }
         }
     }
@@ -88,7 +90,7 @@ void checkInput()
             player.movePlayer("right");
             if (!hasGameStarted)
             {
-                ball.move(playerSpeed, 0);
+                ballSprite.move(playerSpeed, 0);
             }
         }
     }
@@ -117,26 +119,23 @@ float getBrickSpacing()
 {
     float totalWidth = bricks[0].getBrickWidth() * 6; // largeur totale du rectangle de l'ensemble des briques
     float spacing = (WIN_WIDTH - totalWidth) / 2;
-    cout << "Largeur de toutes les briques : " << totalWidth << endl;
-    cout << "Espace gauche et droite : " << spacing << endl;
-    cout << "Largeur de la fenêtre : " << totalWidth + spacing * 2;
 
     return spacing;
 }
 
 void ballMovement()
 {
-    ballHitbox = ball.getGlobalBounds();
-    ballRect.setSize(Vector2f(ballRadius * 2, ballRadius * 2));
+    ballHitbox = ballSprite.getGlobalBounds();
+    ballRect.setSize(Vector2f(ballSpriteSize / 2, ballSpriteSize / 2));
     ballRect.setPosition(ballHitbox.left, ballHitbox.top);
     ballRect.setFillColor(Color(255, 0, 0, 150));
-    ball.move(xBallSpeed, -yBallSpeed);
-    if (ball.getPosition().x < 1 + ballRadius || ball.getPosition().x >= WIN_WIDTH - ballRadius)
+    ballSprite.move(xBallSpeed, -yBallSpeed);
+    if (ballSprite.getPosition().x < 1 + ballSpriteSize / 4 || ballSprite.getPosition().x >= WIN_WIDTH - ballSpriteSize / 4)
     {
         xBallSpeed *= -1;
     }
 
-    if (ball.getPosition().y < 1 + ballRadius || ball.getPosition().y >= WIN_HEIGHT - ballRadius)
+    if (ballSprite.getPosition().y < 1 + ballSpriteSize / 4 || ballSprite.getPosition().y >= WIN_HEIGHT - ballSpriteSize / 4)
     {
         yBallSpeed *= -1;
     }

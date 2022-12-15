@@ -19,6 +19,7 @@ float playerHeight;
 float xBallSpeed = 3.5;
 float yBallSpeed = 3.5;
 float playerSpeed = 4.f;
+int ballSpriteSize = 64;
 bool hasGameStarted = false;
 bool hasCollided = false;
 bool isBackspacePressed = false;
@@ -27,6 +28,8 @@ Clock collisionClock;
 //Instances d'objets
 Texture playerTexture;
 Sprite playerSprite;
+Texture ballTexture;
+Sprite ballSprite;
 CircleShape ball;
 RectangleShape ballRect;
 FloatRect ballHitbox;
