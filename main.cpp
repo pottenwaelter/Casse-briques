@@ -3,7 +3,7 @@
 int main()
 {
     window.setFramerateLimit(60);
-    float xSpacing = getBrickSpacing();
+    xSpacing = getBrickSpacing();
     //Placement des briques
     for (int j = 0; j < 4; j++)
     {
@@ -71,19 +71,19 @@ int main()
 
 void checkInput()
 {
-    if (player.getXPos() > playerWidth / 2)
+    if (player.getXPos() > playerWidth / 2) // si la raquette du joueur plus loin que le bord gauche de la fenêtre
     {
         if (input.getKey().left == true)
         {
             player.movePlayer("left");
             if (!hasGameStarted)
             {
-                ballSprite.move(-playerSpeed, 0);
+                ballSprite.move(-playerSpeed, 0); // on l'autorise à aller vers la gauche
             }
         }
     }
 
-    if (player.getXPos() < WIN_WIDTH - playerWidth / 2)
+    if (player.getXPos() < WIN_WIDTH - playerWidth / 2) // pareil pour la droite
     {
         if (input.getKey().right == true)
         {
@@ -95,7 +95,7 @@ void checkInput()
         }
     }
 
-    if (input.getKey().space == true)
+    if (input.getKey().space == true) // on doit appuyer sur espace pour lancer la partie
     {
         hasGameStarted = true;
     }
@@ -130,6 +130,7 @@ void ballMovement()
     ballRect.setPosition(ballHitbox.left, ballHitbox.top);
     ballRect.setFillColor(Color(255, 0, 0, 150));
     ballSprite.move(xBallSpeed, -yBallSpeed);
+    //Pour faire rebondir la balle sur les coins de l'écran, on multiplie la vitesse par -1 pour qu'elle reparte dans l'autre sens
     if (ballSprite.getPosition().x < 1 + ballSpriteSize / 4 || ballSprite.getPosition().x >= WIN_WIDTH - ballSpriteSize / 4)
     {
         xBallSpeed *= -1;
@@ -140,14 +141,22 @@ void ballMovement()
         yBallSpeed *= -1;
     }
 
-    //TODO : IMPROVE HITBOXES
-    //Different behaviors if the ball hits the side or the corner of a brick
-    //Direction changes according to where the ball hits the player racket
     collisionManagement();
 }
 
 void collisionManagement()
 {
+    //TODO : IMPROVE HITBOXES
+    //Different behaviors if the ball hits the side or the corner of a brick
+    //Direction changes according to where the ball hits the player racket
+    /*if (ballHitbox.top >= bricks[23].getHitbox().top)
+    {
+        cout << "1" << endl;
+    }
+    else
+    {
+        cout << "0" << endl;
+    }*/
     if (!hasCollided)
     {
         if (ballHitbox.intersects(player.getHitbox()))
@@ -159,17 +168,33 @@ void collisionManagement()
 
         for (int i = 0; i < bricks.size(); i++)
         {
-            if (ballHitbox.intersects(bricks[i].getHitbox()))
+            /* 
+            si le côté gauche du sprite de la balle a un x inférieur ou égal au x du côté droit d'une brique (left + width) ET si les coordonnées y de la balle
+            sont comprises entre les coordonnées y de la brique ET si la position x de la balle est supérieure à l'espace à gauche des briques
+            -> la balle repart vers la droite       
+            */
+            if (ballHitbox.left <= bricks[i].getHitbox().left + bricks[i].getHitbox().width
+                && ballHitbox.top >= bricks[i].getHitbox().top && ballHitbox.top <= bricks[i].getHitbox().top + bricks[i].getHitbox().height
+                && ballHitbox.left + ballHitbox.width > xSpacing)
             {
-                bricks[i].brickGetsHit();
-                if (bricks[i].getHealthPoints() == 0)
-                {
-                    bricks.erase(bricks.begin() + i);
-                }
-                yBallSpeed *= -1;
+                xBallSpeed *= -1;
+                cout << "collision droite" << endl;
                 hasCollided = true;
                 collisionClock.restart();
             }
+
+            /*
+            si le haut du sprite de la balle a un y inférieur ou égal au y du bas d'une brique (top + height) et si les coordonnées x de la balle sont comprises
+            entre le x gauche et le x droit de la même brique -> la balle repart vers le bas
+            */
+            /*if (ballHitbox.top <= bricks[i].getHitbox().top + bricks[i].getHitbox().height
+                && ballHitbox.left >= bricks[i].getHitbox().left && ballHitbox.left <= bricks[i].getHitbox().left + bricks[i].getHitbox().width)
+            {
+                yBallSpeed *= -1;
+                cout << "collision bas" << endl;
+                hasCollided = true;
+                collisionClock.restart();
+            }*/
         }
     }
 

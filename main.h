@@ -19,6 +19,7 @@ float playerHeight;
 float xBallSpeed = 3.5;
 float yBallSpeed = 3.5;
 float playerSpeed = 4.f;
+float xSpacing;
 int ballSpriteSize = 64;
 bool hasGameStarted = false;
 bool hasCollided = false;
