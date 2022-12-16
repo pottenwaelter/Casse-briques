@@ -171,12 +171,12 @@ void collisionManagement()
             /* 
             si le côté gauche du sprite de la balle a un x inférieur ou égal au x du côté droit d'une brique (left + width) ET si les coordonnées y de la balle
             sont comprises entre les coordonnées y de la brique ET si la position x de la balle est supérieure à l'espace à gauche des briques
-            -> la balle repart vers la droite       
+            -> la balle repart vers la droite et inversement pour la gauche      
             */
             if(ballHitbox.intersects(bricks[i].getHitbox()))
             {
                 if (ballHitbox.left <= bricks[i].getHitbox().left + bricks[i].getHitbox().width
-                    && ballHitbox.left > bricks[i].getHitbox().left + bricks[i].getBrickWidth() - 5
+                    && ballHitbox.left > bricks[i].getHitbox().left + bricks[i].getBrickWidth() - 5 // 5 = valeur arbitraire de pixels pour que la hitbox gauche soit très localisée sur la brique
                     && ballHitbox.top + ballSpriteSize / 2 >= bricks[i].getHitbox().top 
                     && ballHitbox.top + ballSpriteSize / 2 <= bricks[i].getHitbox().top + bricks[i].getHitbox().height)
                 {
