@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cmath>
 #include "Brick.h"
+#include <list>
 #include "Input.h"
 
 using namespace std;
@@ -24,7 +25,11 @@ int ballSpriteSize = 64;
 bool hasGameStarted = false;
 bool hasCollided = false;
 bool isBackspacePressed = false;
+bool brickIFrame = false;
+Clock iFrameClock;
 Clock collisionClock;
+int brickColumn = 0;
+int brickRow = 0;
 
 //Instances d'objets
 Texture playerTexture;
@@ -34,10 +39,13 @@ Sprite ballSprite;
 CircleShape ball;
 RectangleShape ballRect;
 FloatRect ballHitbox;
-vector<Brick> bricks(24);
+list<Brick> bricks(24);
 Player player;
 Input input;
 RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
+
+//Itérateur de liste
+list<Brick>::iterator it2 = bricks.begin();
 
 
 

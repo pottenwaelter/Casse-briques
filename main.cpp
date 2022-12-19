@@ -5,18 +5,33 @@ int main()
     window.setFramerateLimit(60);
     xSpacing = getBrickSpacing();
     //Placement des briques
-    for (int j = 0; j < 4; j++)
+    //for (int j = 0; j < 4; j++)
+    //{
+    //    for (int i = 0; i < 6; i++)
+    //    {
+    //        /* 
+    //        Pour les indices : on aura d'abord i = 0->1->2, etc avec j = 0, donc i + j * 6 aura toujours j = 0
+    //        A la fin du premier passage sur les i, on sera à l'indice 5 et on reprend avec i = 0, donc i + j * 6 => 0 + 6 puisque j s'incrémente à 1
+    //        Ce qui fait que ça boucle correctement et les blocs sont bien placés
+    //        */
+    //        bricks[i + j * 6].setBrickPosition((xSpacing + i * bricks[i].getBrickWidth()), (100 + j * bricks[i].getBrickHeight()));
+    //    }
+    //}
+    for (auto it = bricks.begin(); it != bricks.end(); ++it)
     {
-        for (int i = 0; i < 6; i++)
+        if (brickColumn < 6)
         {
-            /* 
-            Pour les indices : on aura d'abord i = 0->1->2, etc avec j = 0, donc i + j * 6 aura toujours j = 0
-            A la fin du premier passage sur les i, on sera à l'indice 5 et on reprend avec i = 0, donc i + j * 6 => 0 + 6 puisque j s'incrémente à 1
-            Ce qui fait que ça boucle correctement et les blocs sont bien placés
-            */
-            bricks[i + j * 6].setBrickPosition((xSpacing + i * bricks[i].getBrickWidth()), (100 + j * bricks[i].getBrickHeight()));
+            it->setBrickPosition(xSpacing + brickColumn * it->getBrickWidth(), 100 + brickRow * it->getBrickHeight());
+            brickColumn++;
+        }
+        if (brickColumn == 6)
+        {
+            brickColumn = 0;
+            brickRow++;
         }
     }
+
+
 
     //Placement du joueur
     playerHeight = player.getBrickHeight();
@@ -52,9 +67,14 @@ int main()
         }
 
         window.clear();
-        for (int i = 0; i < bricks.size(); i++)
+        /*for (int i = 0; i < bricks.size(); i++)
         {
                 window.draw(bricks[i]); 
+        }*/
+        for (auto it = bricks.begin(); it != bricks.end(); it++)
+        {
+            Brick& brick = (*it);
+            window.draw(brick);
         }
         window.draw(player);
         window.draw(ballSprite);
@@ -117,7 +137,8 @@ void checkInput()
 
 float getBrickSpacing()
 {
-    float totalWidth = bricks[0].getBrickWidth() * 6; // largeur totale du rectangle de l'ensemble des briques
+    auto accessor = bricks.begin();
+    float totalWidth = accessor->getBrickWidth() * 6; // largeur totale du rectangle de l'ensemble des briques
     float spacing = (WIN_WIDTH - totalWidth) / 2;
 
     return spacing;
@@ -129,7 +150,7 @@ void ballMovement()
     ballRect.setSize(Vector2f(ballSpriteSize / 2, ballSpriteSize / 2));
     ballRect.setPosition(ballHitbox.left, ballHitbox.top);
     ballRect.setFillColor(Color(255, 0, 0, 150));
-    ballSprite.move(-xBallSpeed, -yBallSpeed);
+    ballSprite.move(xBallSpeed, -yBallSpeed);
     //Pour faire rebondir la balle sur les coins de l'écran, on multiplie la vitesse par -1 pour qu'elle reparte dans l'autre sens
     if (ballSprite.getPosition().x < 1 + ballSpriteSize / 4 || ballSprite.getPosition().x >= WIN_WIDTH - ballSpriteSize / 4)
     {
@@ -146,17 +167,8 @@ void ballMovement()
 
 void collisionManagement()
 {
-    //TODO : IMPROVE HITBOXES
-    //Different behaviors if the ball hits the side or the corner of a brick
-    //Direction changes according to where the ball hits the player racket
-    /*if (ballHitbox.top >= bricks[23].getHitbox().top)
-    {
-        cout << "1" << endl;
-    }
-    else
-    {
-        cout << "0" << endl;
-    }*/
+    //TODO : améliorer les hitboxes
+    //Différentes directions de balle selon l'endroit où la balle tape la raquette du joueur
     if (!hasCollided)
     {
         if (ballHitbox.intersects(player.getHitbox()))
@@ -166,29 +178,25 @@ void collisionManagement()
             collisionClock.restart();
         }
 
-        for (int i = 0; i < bricks.size(); i++)
+        
+        for (auto it = bricks.begin(); it != bricks.end();)
         {
-            /* 
-            si le côté gauche du sprite de la balle a un x inférieur ou égal au x du côté droit d'une brique (left + width) ET si les coordonnées y de la balle
-            sont comprises entre les coordonnées y de la brique ET si la position x de la balle est supérieure à l'espace à gauche des briques
-            -> la balle repart vers la droite et inversement pour la gauche      
-            */
-            if(ballHitbox.intersects(bricks[i].getHitbox()))
+            if (ballHitbox.intersects(it->getHitbox()))
             {
-                if (ballHitbox.left <= bricks[i].getHitbox().left + bricks[i].getHitbox().width
-                    && ballHitbox.left > bricks[i].getHitbox().left + bricks[i].getBrickWidth() - 5 // 5 = valeur arbitraire de pixels pour que la hitbox gauche soit très localisée sur la brique
-                    && ballHitbox.top + ballSpriteSize / 2 >= bricks[i].getHitbox().top 
-                    && ballHitbox.top + ballSpriteSize / 2 <= bricks[i].getHitbox().top + bricks[i].getHitbox().height)
+                if (ballHitbox.left <= it->getHitbox().left + it->getHitbox().width
+                    && ballHitbox.left > it->getHitbox().left + it->getBrickWidth() - 5 // 5 = valeur arbitraire de pixels pour que la hitbox gauche soit très localisée sur la brique
+                    && ballHitbox.top + ballSpriteSize / 2 >= it->getHitbox().top
+                    && ballHitbox.top + ballSpriteSize / 2 <= it->getHitbox().top + it->getHitbox().height)
                 {
                     xBallSpeed *= -1;
                     cout << "collision droite" << endl;
                     hasCollided = true;
                     collisionClock.restart();
                 }
-                else if (ballHitbox.left + ballHitbox.width >= bricks[i].getHitbox().left
-                    && ballHitbox.left + ballHitbox.width < bricks[i].getHitbox().left + 5
-                    && ballHitbox.top + ballSpriteSize / 2 >= bricks[i].getHitbox().top
-                    && ballHitbox.top + ballSpriteSize / 2 <= bricks[i].getHitbox().top + bricks[i].getHitbox().height)
+                else if (ballHitbox.left + ballHitbox.width >= it->getHitbox().left
+                    && ballHitbox.left + ballHitbox.width < it->getHitbox().left + 5
+                    && ballHitbox.top + ballSpriteSize / 2 >= it->getHitbox().top
+                    && ballHitbox.top + ballSpriteSize / 2 <= it->getHitbox().top + it->getHitbox().height)
                 {
                     xBallSpeed *= -1;
                     cout << "collision gauche" << endl;
@@ -199,31 +207,40 @@ void collisionManagement()
                 si le haut du sprite de la balle a un y inférieur ou égal au y du bas d'une brique (top + height) et si les coordonnées x de la balle sont comprises
                 entre le x gauche et le x droit de la même brique -> la balle repart vers le bas
                 */
-                if (ballHitbox.top <= bricks[i].getHitbox().top + bricks[i].getHitbox().height
-                    && ballHitbox.top > bricks[i].getHitbox().top + bricks[i].getHitbox().height - 5
-                    && ballHitbox.left + ballSpriteSize / 2 >= bricks[i].getHitbox().left 
-                    && ballHitbox.left + ballSpriteSize / 2 <= bricks[i].getHitbox().left + bricks[i].getHitbox().width)
+                if (ballHitbox.top <= it->getHitbox().top + it->getHitbox().height
+                    && ballHitbox.top > it->getHitbox().top + it->getHitbox().height - 5
+                    && ballHitbox.left + ballSpriteSize / 2 >= it->getHitbox().left
+                    && ballHitbox.left + ballSpriteSize / 2 <= it->getHitbox().left + it->getHitbox().width)
                 {
                     yBallSpeed *= -1;
                     cout << "collision bas" << endl;
                     hasCollided = true;
                     collisionClock.restart();
                 }
-                else if(ballHitbox.top + ballHitbox.height >= bricks[i].getHitbox().top
-                    && ballHitbox.top + ballHitbox.height < bricks[i].getHitbox().top + 5
-                    && ballHitbox.left + ballSpriteSize / 2 >= bricks[i].getHitbox().left
-                    && ballHitbox.left + ballSpriteSize / 2 <= bricks[i].getHitbox().left + bricks[i].getHitbox().width)
+                else if (ballHitbox.top + ballHitbox.height >= it->getHitbox().top
+                    && ballHitbox.top + ballHitbox.height < it->getHitbox().top + 5
+                    && ballHitbox.left + ballSpriteSize / 2 >= it->getHitbox().left
+                    && ballHitbox.left + ballSpriteSize / 2 <= it->getHitbox().left + it->getHitbox().width)
                 {
                     yBallSpeed *= -1;
                     cout << "collision haut" << endl;
                     hasCollided = true;
                     collisionClock.restart();
                 }
+                it->brickGetsHit();
+                if (it->getHealthPoints() == 0)
+                {
+                    it = bricks.erase(it);
+                }
+            }
+            else
+            {
+                it++;
             }
         }
     }
 
-    if (collisionClock.getElapsedTime().asSeconds() > 0.2 && hasCollided)
+    if (collisionClock.getElapsedTime().asSeconds() > 0.1 && hasCollided)
     {
         hasCollided = false;
     }

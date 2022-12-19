@@ -9,9 +9,6 @@ Brick::Brick()
 	m_xOffset = 0;
 	m_yOffset = 130;
 	loadTexture("ressources/Breakout_Tile_Free.png");
-	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(IntRect(m_xOffset, m_yOffset, m_spriteWidth, m_spriteHeight));
-	m_sprite.setScale(m_spriteScale, m_spriteScale);
 	m_brickWidth = m_spriteWidth * m_spriteScale;
 	m_brickHeight = m_spriteHeight * m_spriteScale;
 	m_healthPoints = 1;
@@ -25,9 +22,6 @@ Brick::Brick(int xOffset, int yOffset, int width, int height, float scale)
 	m_xOffset = xOffset;
 	m_yOffset = yOffset;
 	loadTexture("ressources/Breakout_Tile_Free.png");
-	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(IntRect(m_xOffset, m_yOffset, m_spriteWidth, m_spriteHeight));
-	m_sprite.setScale(m_spriteScale, m_spriteScale);
 	m_brickWidth = m_spriteWidth * m_spriteScale;
 	m_brickHeight = m_spriteHeight * m_spriteScale;
 	m_sprite.setOrigin(Vector2f(m_brickWidth, m_brickHeight));
@@ -40,6 +34,9 @@ void Brick::loadTexture(std::string text)
 	{
 		std::cout << "Erreur du chargement de la texture : " + text << std::endl;
 	}
+	m_sprite.setTexture(m_texture);
+	m_sprite.setTextureRect(IntRect(m_xOffset, m_yOffset, m_spriteWidth, m_spriteHeight));
+	m_sprite.setScale(m_spriteScale, m_spriteScale);
 }
 
 int Brick::getHealthPoints()
@@ -80,6 +77,11 @@ float Brick::getXPos()
 float Brick::getYPos()
 {
 	return m_sprite.getPosition().y;
+}
+
+int Brick::getTextRect()
+{
+	return m_sprite.getTextureRect().top;
 }
 
 Vector2f Brick::getScale()

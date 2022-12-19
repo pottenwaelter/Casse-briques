@@ -20,6 +20,7 @@ public:
 	float getBrickHeight();
 	float getXPos();
 	float getYPos();
+	int getTextRect();
 	Vector2f getScale();
 	Vector2f getOrigin();
 	FloatRect getHitbox();
