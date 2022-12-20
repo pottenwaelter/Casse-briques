@@ -24,27 +24,31 @@ int ballSpriteSize = 64;
 bool hasGameStarted = false;
 bool hasCollided = false;
 bool isBackspacePressed = false;
-bool brickIFrame = false;
-Clock iFrameClock;
 Clock collisionClock;
 int brickColumn = 0;
 int brickRow = 0;
 
+//Variables de texte
+Font generalFont;
+Text gameOverString;
+Text levelString;
+
+
+
 //Instances d'objets
-Texture playerTexture;
+Texture spriteSheet;
+Texture levelTexture;
+Sprite levelSprite;
 Sprite playerSprite;
-Texture ballTexture;
 Sprite ballSprite;
 CircleShape ball;
 RectangleShape ballRect;
 FloatRect ballHitbox;
 list<Brick> bricks(24);
 Player player;
+vector<Sprite> heartSprites(player.getPlayerLives());
 Input input;
 RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
-
-//Itérateur de liste
-list<Brick>::iterator it2 = bricks.begin();
 
 //Vectors de coordonnées de hitboxes x/y
 Vector2f ballTopLeft;
@@ -55,7 +59,14 @@ Vector2f ballBottomRight;
 
 
 //Prototypes de fonctions
+void loadBaseTexture();
+void setBall();
+void setLevelBackground(string file);
 void checkInput();
 float getBrickSpacing();
 void ballMovement();
 void collisionManagement();
+void setHearts();
+void playerLifeLossManagement();
+void setLevelText(string text);
+void centerText(Text text);

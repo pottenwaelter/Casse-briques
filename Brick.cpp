@@ -137,3 +137,8 @@ int Player::getPlayerLives()
 {
 	return m_playerLives;
 }
+
+void Player::playerLosesLife()
+{
+	m_playerLives--;
+}

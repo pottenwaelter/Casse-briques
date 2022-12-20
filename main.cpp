@@ -18,6 +18,16 @@ int main()
             brickRow++;
         }
     }
+    //Chargement de la police
+    if (!generalFont.loadFromFile("ressources/font/verdana.ttf"))
+    {
+        cout << "Echec chargement police d'ecriture" << endl;
+    }
+    //Chargement des textures (sprite sheet)
+    loadBaseTexture();
+
+    //Chargement du background du niveau
+    setLevelBackground("ressources/backgrounds/sunset.jpg");
 
     //Placement du joueur
     playerHeight = player.getBrickHeight();
@@ -25,16 +35,13 @@ int main()
     player.setBrickPosition(WIN_WIDTH / 2, WIN_HEIGHT - 30);
 
     //Initialisation et placement du sprite de la balle
-    if (!ballTexture.loadFromFile("ressources/Breakout_Tile_Free.png"))
-    {
-        cout << "Erreur chargement texture balle" << endl;
-    }
-    ballSprite.setTexture(ballTexture);
-    ballSprite.setTextureRect(IntRect(1403, 652, ballSpriteSize, ballSpriteSize));
-    ballSprite.setScale(0.5, 0.5);
-    ballSprite.setOrigin(ballSpriteSize / 2, ballSpriteSize / 2);
-    ballSprite.setPosition(player.getXPos(), player.getYPos() - playerHeight - 5);
+    setBall();
 
+    //Initialisation des coeurs de vie
+    setHearts();
+
+    //Initialisation du texte du niveau 
+    setLevelText("LEVEL 1");
 
     while (window.isOpen())
     {
@@ -45,6 +52,9 @@ int main()
                 window.close();
             input.inputHandler(event, window);
         }
+        //Centrage des textes
+        levelString.setOrigin(round(levelString.getLocalBounds().left + levelString.getLocalBounds().width / 2), 
+                              round(levelString.getLocalBounds().top + levelString.getLocalBounds().height / 2));
 
         checkInput();
         if (hasGameStarted)
@@ -52,7 +62,9 @@ int main()
             ballMovement();
         }
 
-        window.clear();
+        window.clear(Color::White);
+        window.draw(levelSprite);
+        //Affichage de tous les éléments du jeu
         for (auto it = bricks.begin(); it != bricks.end(); it++)
         {
             Brick& brick = (*it);
@@ -64,11 +76,34 @@ int main()
         {
             window.draw(ballRect);
         }
+        for (int i = 0; i < heartSprites.size(); i++)
+        {
+            window.draw(heartSprites[i]);
+        }
+        window.draw(levelString);
     
         window.display();
     }
 
     return 0;
+}
+
+void loadBaseTexture()
+{
+    if (!spriteSheet.loadFromFile("ressources/Breakout_Tile_Free.png"))
+    {
+        cout << "Erreur chargement texture" << endl;
+    }
+}
+
+void setBall()
+{
+    ballSprite.setTexture(spriteSheet);
+    ballSprite.setTextureRect(IntRect(1403, 652, ballSpriteSize, ballSpriteSize));
+    ballSprite.setScale(0.5, 0.5);
+    ballSprite.setOrigin(ballSpriteSize / 2, ballSpriteSize / 2);
+    ballSprite.setColor(Color(200, 50, 50));
+    ballSprite.setPosition(player.getXPos(), player.getYPos() - playerHeight - 5);
 }
 
 void checkInput()
@@ -148,6 +183,7 @@ void ballMovement()
     if (ballSprite.getPosition().y >= WIN_HEIGHT)
     {
         ballSprite.setPosition(player.getXPos(), player.getYPos() - playerHeight - 5);
+        playerLifeLossManagement();
         yBallSpeed *= -1;
         hasGameStarted = false;
     }
@@ -260,4 +296,50 @@ void collisionManagement()
     {
         hasCollided = false;
     }
+}
+
+void setHearts()
+{
+    for (int i = 0; i < player.getPlayerLives(); i++)
+    {
+        heartSprites[i].setTexture(spriteSheet);
+        heartSprites[i].setTextureRect(IntRect(1637, 652, 64, 58));
+        heartSprites[i].setScale(0.5, 0.5);
+        heartSprites[i].setColor(Color(255, 0, 0, 175));
+        heartSprites[i].setPosition(i * 35 + 10, 10);
+    }
+}
+
+void playerLifeLossManagement()
+{
+    if (!heartSprites.empty())
+    {
+        player.playerLosesLife();
+        heartSprites.pop_back();
+    }
+}
+
+void setLevelBackground(string file)
+{
+    if (!levelTexture.loadFromFile(file));
+    {
+        cout << "Erreur chargement texture du background du niveau" << endl;
+    }
+    levelSprite.setTexture(levelTexture);
+    levelSprite.setTextureRect(IntRect(0, 0, WIN_WIDTH, WIN_HEIGHT));
+    levelSprite.setPosition(0, 0);
+}
+
+void setLevelText(string text)
+{
+    levelString.setFont(generalFont);
+    levelString.setCharacterSize(25);
+    levelString.setFillColor(Color(255, 255, 255, 200));
+    levelString.setString(text);
+    levelString.setPosition(WIN_WIDTH / 2, 20);
+}
+
+void centerText(Text text)
+{
+    text.setOrigin(round(text.getLocalBounds().left + text.getLocalBounds().width / 2), round(text.getLocalBounds().top + text.getLocalBounds().height / 2));
 }
