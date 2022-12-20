@@ -40,8 +40,9 @@ int main()
     //Initialisation des coeurs de vie
     setHearts();
 
-    //Initialisation du texte du niveau 
+    //Initialisation des textes 
     setLevelText("LEVEL 1");
+    setGameOverText("GAME OVER");
 
     while (window.isOpen())
     {
@@ -55,16 +56,27 @@ int main()
         //Centrage des textes
         levelString.setOrigin(round(levelString.getLocalBounds().left + levelString.getLocalBounds().width / 2), 
                               round(levelString.getLocalBounds().top + levelString.getLocalBounds().height / 2));
+        gameOverString.setOrigin(round(gameOverString.getLocalBounds().left + gameOverString.getLocalBounds().width / 2),
+            round(gameOverString.getLocalBounds().top + gameOverString.getLocalBounds().height / 2));
 
+        if (heartSprites.empty())
+        {
+            isGameOver = true;
+        }
+
+        //gestion des inputs
         checkInput();
+
+        //Gestion du mouvement de la balle
         if (hasGameStarted)
         {
             ballMovement();
         }
 
         window.clear(Color::White);
-        window.draw(levelSprite);
         //Affichage de tous les éléments du jeu
+        window.draw(levelSprite);
+        
         for (auto it = bricks.begin(); it != bricks.end(); it++)
         {
             Brick& brick = (*it);
@@ -81,6 +93,10 @@ int main()
             window.draw(heartSprites[i]);
         }
         window.draw(levelString);
+        if (isGameOver)
+        {
+            window.draw(gameOverString);
+        }
     
         window.display();
     }
@@ -108,35 +124,38 @@ void setBall()
 
 void checkInput()
 {
-
-    if (player.getXPos() > playerWidth / 2) // si la raquette du joueur plus loin que le bord gauche de la fenêtre
+    if (!isGameOver)
     {
-        if (input.getKey().left == true)
+        if (player.getXPos() > playerWidth / 2) // si la raquette du joueur plus loin que le bord gauche de la fenêtre
         {
-            player.movePlayer("left");
-            if (!hasGameStarted)
+            if (input.getKey().left == true)
             {
-                ballSprite.move(-(player.getPlayerSpeed()), 0); // on l'autorise à aller vers la gauche
+                player.movePlayer("left");
+                if (!hasGameStarted)
+                {
+                    ballSprite.move(-(player.getPlayerSpeed()), 0); // on l'autorise à aller vers la gauche
+                }
             }
         }
-    }
 
-    if (player.getXPos() < WIN_WIDTH - playerWidth / 2) // pareil pour la droite
-    {
-        if (input.getKey().right == true)
+        if (player.getXPos() < WIN_WIDTH - playerWidth / 2) // pareil pour la droite
         {
-            player.movePlayer("right");
-            if (!hasGameStarted)
+            if (input.getKey().right == true)
             {
-                ballSprite.move(player.getPlayerSpeed(), 0);
+                player.movePlayer("right");
+                if (!hasGameStarted)
+                {
+                    ballSprite.move(player.getPlayerSpeed(), 0);
+                }
             }
         }
-    }
 
-    if (input.getKey().space == true) // on doit appuyer sur espace pour lancer la partie
-    {
-        hasGameStarted = true;
+        if (input.getKey().space == true) // on doit appuyer sur espace pour lancer la partie
+        {
+            hasGameStarted = true;
+        }
     }
+    
 
     if (input.getKey().backspace == true)
     {
@@ -182,9 +201,12 @@ void ballMovement()
 
     if (ballSprite.getPosition().y >= WIN_HEIGHT)
     {
-        ballSprite.setPosition(player.getXPos(), player.getYPos() - playerHeight - 5);
+        if (!isGameOver)
+        {
+            ballSprite.setPosition(player.getXPos(), player.getYPos() - playerHeight - 5);
+            yBallSpeed *= -1;
+        }
         playerLifeLossManagement();
-        yBallSpeed *= -1;
         hasGameStarted = false;
     }
 
@@ -330,16 +352,26 @@ void setLevelBackground(string file)
     levelSprite.setPosition(0, 0);
 }
 
-void setLevelText(string text)
+void setLevelText(string str)
 {
     levelString.setFont(generalFont);
     levelString.setCharacterSize(25);
     levelString.setFillColor(Color(255, 255, 255, 200));
-    levelString.setString(text);
+    levelString.setString(str);
     levelString.setPosition(WIN_WIDTH / 2, 20);
 }
 
+//NE MARCHE PAS FOR SOME REASON
 void centerText(Text text)
 {
     text.setOrigin(round(text.getLocalBounds().left + text.getLocalBounds().width / 2), round(text.getLocalBounds().top + text.getLocalBounds().height / 2));
+}
+
+void setGameOverText(string str)
+{
+    gameOverString.setFont(generalFont);
+    gameOverString.setCharacterSize(40);
+    gameOverString.setFillColor(Color(255, 255, 255));
+    gameOverString.setString(str);
+    gameOverString.setPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 }
