@@ -48,9 +48,12 @@ class Player : public Brick
 public:
 	Player();
 	void movePlayer(std::string direction);
+	float getPlayerSpeed();
+	int getPlayerLives();
 
 private:
 	float m_playerSpeed;
+	int m_playerLives;
 };
 
 #endif // !BRICK_H

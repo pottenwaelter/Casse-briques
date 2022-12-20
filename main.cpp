@@ -5,18 +5,6 @@ int main()
     window.setFramerateLimit(60);
     xSpacing = getBrickSpacing();
     //Placement des briques
-    //for (int j = 0; j < 4; j++)
-    //{
-    //    for (int i = 0; i < 6; i++)
-    //    {
-    //        /* 
-    //        Pour les indices : on aura d'abord i = 0->1->2, etc avec j = 0, donc i + j * 6 aura toujours j = 0
-    //        A la fin du premier passage sur les i, on sera à l'indice 5 et on reprend avec i = 0, donc i + j * 6 => 0 + 6 puisque j s'incrémente à 1
-    //        Ce qui fait que ça boucle correctement et les blocs sont bien placés
-    //        */
-    //        bricks[i + j * 6].setBrickPosition((xSpacing + i * bricks[i].getBrickWidth()), (100 + j * bricks[i].getBrickHeight()));
-    //    }
-    //}
     for (auto it = bricks.begin(); it != bricks.end(); ++it)
     {
         if (brickColumn < 6)
@@ -30,8 +18,6 @@ int main()
             brickRow++;
         }
     }
-
-
 
     //Placement du joueur
     playerHeight = player.getBrickHeight();
@@ -47,7 +33,7 @@ int main()
     ballSprite.setTextureRect(IntRect(1403, 652, ballSpriteSize, ballSpriteSize));
     ballSprite.setScale(0.5, 0.5);
     ballSprite.setOrigin(ballSpriteSize / 2, ballSpriteSize / 2);
-    ballSprite.setPosition(WIN_WIDTH / 2, player.getYPos() - playerHeight - 5);
+    ballSprite.setPosition(player.getXPos(), player.getYPos() - playerHeight - 5);
 
 
     while (window.isOpen())
@@ -67,10 +53,6 @@ int main()
         }
 
         window.clear();
-        /*for (int i = 0; i < bricks.size(); i++)
-        {
-                window.draw(bricks[i]); 
-        }*/
         for (auto it = bricks.begin(); it != bricks.end(); it++)
         {
             Brick& brick = (*it);
@@ -91,6 +73,7 @@ int main()
 
 void checkInput()
 {
+
     if (player.getXPos() > playerWidth / 2) // si la raquette du joueur plus loin que le bord gauche de la fenêtre
     {
         if (input.getKey().left == true)
@@ -98,7 +81,7 @@ void checkInput()
             player.movePlayer("left");
             if (!hasGameStarted)
             {
-                ballSprite.move(-playerSpeed, 0); // on l'autorise à aller vers la gauche
+                ballSprite.move(-(player.getPlayerSpeed()), 0); // on l'autorise à aller vers la gauche
             }
         }
     }
@@ -110,7 +93,7 @@ void checkInput()
             player.movePlayer("right");
             if (!hasGameStarted)
             {
-                ballSprite.move(playerSpeed, 0);
+                ballSprite.move(player.getPlayerSpeed(), 0);
             }
         }
     }
@@ -157,9 +140,16 @@ void ballMovement()
         xBallSpeed *= -1;
     }
 
-    if (ballSprite.getPosition().y < 1 + ballSpriteSize / 4 || ballSprite.getPosition().y >= WIN_HEIGHT - ballSpriteSize / 4)
+    if (ballSprite.getPosition().y < 1 + ballSpriteSize / 4)
     {
         yBallSpeed *= -1;
+    }
+
+    if (ballSprite.getPosition().y >= WIN_HEIGHT)
+    {
+        ballSprite.setPosition(player.getXPos(), player.getYPos() - playerHeight - 5);
+        yBallSpeed *= -1;
+        hasGameStarted = false;
     }
 
     collisionManagement();
@@ -173,11 +163,29 @@ void collisionManagement()
     {
         if (ballHitbox.intersects(player.getHitbox()))
         {
-            yBallSpeed *= -1;
+            if (ballHitbox.left > player.getHitbox().left + player.getHitbox().width - 50) // si la balle tape sur le côté droit de la raquette
+            {
+                if (xBallSpeed < 0)
+                {
+                    xBallSpeed *= -1; //la balle repart vers la droite
+                }
+            }
+
+            if (ballHitbox.left + ballHitbox.width < player.getHitbox().left + 50) // si la balle tape sur le côté gauche de la raquette
+            {
+                if (xBallSpeed > 0)
+                {
+                    xBallSpeed *= -1; //la balle repart vers la gauche
+                }
+            }
+
+            if (ballHitbox.top < player.getHitbox().top)
+            {
+                yBallSpeed *= -1;
+            }
             hasCollided = true;
             collisionClock.restart();
         }
-
         
         for (auto it = bricks.begin(); it != bricks.end();)
         {
@@ -203,11 +211,8 @@ void collisionManagement()
                     hasCollided = true;
                     collisionClock.restart();
                 }
-                /*
-                si le haut du sprite de la balle a un y inférieur ou égal au y du bas d'une brique (top + height) et si les coordonnées x de la balle sont comprises
-                entre le x gauche et le x droit de la même brique -> la balle repart vers le bas
-                */
-                if (ballHitbox.top <= it->getHitbox().top + it->getHitbox().height
+     
+                else if (ballHitbox.top <= it->getHitbox().top + it->getHitbox().height
                     && ballHitbox.top > it->getHitbox().top + it->getHitbox().height - 5
                     && ballHitbox.left + ballSpriteSize / 2 >= it->getHitbox().left
                     && ballHitbox.left + ballSpriteSize / 2 <= it->getHitbox().left + it->getHitbox().width)
@@ -227,6 +232,17 @@ void collisionManagement()
                     hasCollided = true;
                     collisionClock.restart();
                 }
+                else
+                {
+                    //NUL mais on garde pour l'instant
+                    yBallSpeed *= -1;
+                    xBallSpeed *= -1;
+                    cout << "collision indeterminee" << endl;
+                    hasCollided = true;
+                    collisionClock.restart();
+                }
+
+
                 it->brickGetsHit();
                 if (it->getHealthPoints() == 0)
                 {

@@ -111,7 +111,8 @@ Brick::~Brick()
 
 Player::Player() : Brick(1158, 462, 243, 64, 0.5)
 {
-	m_playerSpeed = 4;
+	m_playerSpeed = 5;
+	m_playerLives = 5;
 }
 
 void Player::movePlayer(std::string direction)
@@ -125,4 +126,14 @@ void Player::movePlayer(std::string direction)
 	{
 		m_sprite.move(-m_playerSpeed, 0);
 	}
+}
+
+float Player::getPlayerSpeed()
+{
+	return m_playerSpeed;
+}
+
+int Player::getPlayerLives()
+{
+	return m_playerLives;
 }

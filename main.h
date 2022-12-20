@@ -19,7 +19,6 @@ float ballRadius = 12.f;
 float playerHeight;
 float xBallSpeed = 3.5;
 float yBallSpeed = 3.5;
-float playerSpeed = 4.f;
 float xSpacing;
 int ballSpriteSize = 64;
 bool hasGameStarted = false;
@@ -46,6 +45,12 @@ RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
 
 //Itérateur de liste
 list<Brick>::iterator it2 = bricks.begin();
+
+//Vectors de coordonnées de hitboxes x/y
+Vector2f ballTopLeft;
+Vector2f ballTopRight;
+Vector2f ballBottomLeft;
+Vector2f ballBottomRight;
 
 
 
