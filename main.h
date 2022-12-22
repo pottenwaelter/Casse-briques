@@ -42,7 +42,6 @@ Texture levelTexture;
 Sprite levelSprite;
 Sprite playerSprite;
 Sprite ballSprite;
-CircleShape ball;
 RectangleShape ballRect;
 FloatRect ballHitbox;
 list<Brick> bricks(24);

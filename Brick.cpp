@@ -1,6 +1,8 @@
 #include "Brick.h"
 #include <iostream>
 
+//Constructeurs et méthodes de la classe mère Brick
+
 Brick::Brick()
 {
 	m_spriteHeight = 128;
@@ -106,8 +108,9 @@ FloatRect Brick::getHitbox()
 
 Brick::~Brick()
 {
-	std::cout << "Destruction" << std::endl;
 }
+
+//Constructeurs et méthodes de la classe fille Player
 
 Player::Player() : Brick(1158, 462, 243, 64, 0.5)
 {

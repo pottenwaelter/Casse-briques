@@ -216,7 +216,6 @@ void ballMovement()
 void collisionManagement()
 {
     //TODO : améliorer les hitboxes
-    //Différentes directions de balle selon l'endroit où la balle tape la raquette du joueur
     if (!hasCollided)
     {
         if (ballHitbox.intersects(player.getHitbox()))
@@ -237,80 +236,63 @@ void collisionManagement()
                 }
             }
 
-            if (ballHitbox.top < player.getHitbox().top)
+            if (ballHitbox.top < player.getHitbox().top + player.getHitbox().height)
             {
                 yBallSpeed *= -1;
             }
             hasCollided = true;
             collisionClock.restart();
         }
+    }
         
-        for (auto it = bricks.begin(); it != bricks.end();)
-        {
-            if (ballHitbox.intersects(it->getHitbox()))
+    for (auto it = bricks.begin(); it != bricks.end();)
+    {
+        if (ballHitbox.intersects(it->getHitbox()))
+        {               
+            //On voit à quel point la balle a une intersection avec la brique dans chaque direction
+            float leftOverlap = ballHitbox.left + ballHitbox.width - it->getHitbox().left;
+            float rightOverlap = it->getHitbox().left + it->getHitbox().width - ballHitbox.left;
+            float topOverlap = ballHitbox.top + ballHitbox.height - it->getHitbox().top;
+            float bottomOverlap = it->getHitbox().top + it->getHitbox().height - ballHitbox.top;
+
+            //Si le chevauchement gauche est plus petit que le chevauchement droit on peut dire que la balle a tapé la brique sur la gauche
+            //inversement pour la droite
+            bool leftCollision(abs(leftOverlap) < abs(rightOverlap));
+            bool rightCollision(abs(rightOverlap) < abs(leftOverlap));
+            //Pareil pour la collision haut/bas
+            bool topCollision(abs(topOverlap) < abs(bottomOverlap));
+            bool bottomCollision(abs(bottomOverlap) < abs(topOverlap));
+
+            //Stockage du chevauchement minimal sur les axes X et Y
+            float minXOverlap{ leftCollision ? leftOverlap : rightOverlap };
+            float minYOverlap{ topCollision ? topOverlap : bottomOverlap };
+
+            //Puis on change la direction de la balle en suivant ces règles
+            if (abs(minXOverlap) < abs(minYOverlap))
             {
-                if (ballHitbox.left <= it->getHitbox().left + it->getHitbox().width
-                    && ballHitbox.left > it->getHitbox().left + it->getBrickWidth() - 5 // 5 = valeur arbitraire de pixels pour que la hitbox gauche soit très localisée sur la brique
-                    && ballHitbox.top + ballSpriteSize / 2 >= it->getHitbox().top
-                    && ballHitbox.top + ballSpriteSize / 2 <= it->getHitbox().top + it->getHitbox().height)
+                if (leftCollision || rightCollision)
                 {
                     xBallSpeed *= -1;
-                    cout << "collision droite" << endl;
-                    hasCollided = true;
-                    collisionClock.restart();
-                }
-                else if (ballHitbox.left + ballHitbox.width >= it->getHitbox().left
-                    && ballHitbox.left + ballHitbox.width < it->getHitbox().left + 5
-                    && ballHitbox.top + ballSpriteSize / 2 >= it->getHitbox().top
-                    && ballHitbox.top + ballSpriteSize / 2 <= it->getHitbox().top + it->getHitbox().height)
-                {
-                    xBallSpeed *= -1;
-                    cout << "collision gauche" << endl;
-                    hasCollided = true;
-                    collisionClock.restart();
-                }
-     
-                else if (ballHitbox.top <= it->getHitbox().top + it->getHitbox().height
-                    && ballHitbox.top > it->getHitbox().top + it->getHitbox().height - 5
-                    && ballHitbox.left + ballSpriteSize / 2 >= it->getHitbox().left
-                    && ballHitbox.left + ballSpriteSize / 2 <= it->getHitbox().left + it->getHitbox().width)
-                {
-                    yBallSpeed *= -1;
-                    cout << "collision bas" << endl;
-                    hasCollided = true;
-                    collisionClock.restart();
-                }
-                else if (ballHitbox.top + ballHitbox.height >= it->getHitbox().top
-                    && ballHitbox.top + ballHitbox.height < it->getHitbox().top + 5
-                    && ballHitbox.left + ballSpriteSize / 2 >= it->getHitbox().left
-                    && ballHitbox.left + ballSpriteSize / 2 <= it->getHitbox().left + it->getHitbox().width)
-                {
-                    yBallSpeed *= -1;
-                    cout << "collision haut" << endl;
-                    hasCollided = true;
-                    collisionClock.restart();
-                }
-                else
-                {
-                    //NUL mais on garde pour l'instant
-                    yBallSpeed *= -1;
-                    xBallSpeed *= -1;
-                    cout << "collision indeterminee" << endl;
-                    hasCollided = true;
-                    collisionClock.restart();
-                }
-
-
-                it->brickGetsHit();
-                if (it->getHealthPoints() == 0)
-                {
-                    it = bricks.erase(it);
                 }
             }
             else
             {
-                it++;
+                if (topCollision || bottomCollision)
+                {
+                    yBallSpeed *= -1;
+                }
             }
+
+
+            it->brickGetsHit();
+            if (it->getHealthPoints() == 0)
+            {
+                it = bricks.erase(it);
+            }
+        }
+        else
+        {
+            it++;
         }
     }
 
@@ -343,13 +325,16 @@ void playerLifeLossManagement()
 
 void setLevelBackground(string file)
 {
-    if (!levelTexture.loadFromFile(file));
+    if (!levelTexture.loadFromFile(file))
     {
-        cout << "Erreur chargement texture du background du niveau" << endl;
+        cerr << "Erreur chargement texture du background du niveau" << endl;
     }
-    levelSprite.setTexture(levelTexture);
-    levelSprite.setTextureRect(IntRect(0, 0, WIN_WIDTH, WIN_HEIGHT));
-    levelSprite.setPosition(0, 0);
+    else
+    {
+        levelSprite.setTexture(levelTexture);
+        levelSprite.setTextureRect(IntRect(0, 0, WIN_WIDTH, WIN_HEIGHT));
+        levelSprite.setPosition(0, 0);
+    }
 }
 
 void setLevelText(string str)
