@@ -19,10 +19,10 @@ int main()
         }
     }
     //Chargement de la police
-    if (!generalFont.loadFromFile("ressources/font/verdana.ttf"))
+    /*if (!generalFont.loadFromFile("ressources/font/verdana.ttf"))
     {
         cout << "Echec chargement police d'ecriture" << endl;
-    }
+    }*/
     //Chargement des textures (sprite sheet)
     loadBaseTexture();
 
@@ -41,8 +41,7 @@ int main()
     setHearts();
 
     //Initialisation des textes 
-    setLevelText("LEVEL 1");
-    setGameOverText("GAME OVER");
+    prepareStartingTexts();
 
     while (window.isOpen())
     {
@@ -54,10 +53,8 @@ int main()
             input.inputHandler(event, window);
         }
         //Centrage des textes
-        levelString.setOrigin(round(levelString.getLocalBounds().left + levelString.getLocalBounds().width / 2), 
-                              round(levelString.getLocalBounds().top + levelString.getLocalBounds().height / 2));
-        gameOverString.setOrigin(round(gameOverString.getLocalBounds().left + gameOverString.getLocalBounds().width / 2),
-            round(gameOverString.getLocalBounds().top + gameOverString.getLocalBounds().height / 2));
+        levelText.centerTextOrigin();
+        gameOverText.centerTextOrigin();
 
         if (heartSprites.empty())
         {
@@ -92,10 +89,10 @@ int main()
         {
             window.draw(heartSprites[i]);
         }
-        window.draw(levelString);
+        window.draw(levelText);
         if (isGameOver)
         {
-            window.draw(gameOverString);
+            window.draw(gameOverText);
         }
     
         window.display();
@@ -337,26 +334,19 @@ void setLevelBackground(string file)
     }
 }
 
-void setLevelText(string str)
-{
-    levelString.setFont(generalFont);
-    levelString.setCharacterSize(25);
-    levelString.setFillColor(Color(255, 255, 255, 200));
-    levelString.setString(str);
-    levelString.setPosition(WIN_WIDTH / 2, 20);
-}
-
 //NE MARCHE PAS FOR SOME REASON
 void centerText(Text text)
 {
     text.setOrigin(round(text.getLocalBounds().left + text.getLocalBounds().width / 2), round(text.getLocalBounds().top + text.getLocalBounds().height / 2));
 }
 
-void setGameOverText(string str)
+void prepareStartingTexts()
 {
-    gameOverString.setFont(generalFont);
-    gameOverString.setCharacterSize(40);
-    gameOverString.setFillColor(Color(255, 255, 255));
-    gameOverString.setString(str);
-    gameOverString.setPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
+    levelText.setCharSize(25);
+    levelText.setString("LEVEL 1");
+    levelText.setPosition(WIN_WIDTH / 2, 20);
+
+    gameOverText.setCharSize(40);
+    gameOverText.setString("GAME OVER");
+    gameOverText.setPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 }

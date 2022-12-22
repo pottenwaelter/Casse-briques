@@ -142,11 +142,13 @@
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Textes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="Textes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

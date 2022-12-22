@@ -5,6 +5,7 @@
 #include "Brick.h"
 #include <list>
 #include "Input.h"
+#include "Textes.h"
 
 using namespace std;
 using namespace sf;
@@ -30,11 +31,8 @@ int brickColumn = 0;
 int brickRow = 0;
 
 //Variables de texte
-Font generalFont;
-Text gameOverString;
-Text levelString;
-
-
+InGameText levelText;
+InGameText gameOverText;
 
 //Instances d'objets
 Texture spriteSheet;
@@ -50,13 +48,6 @@ vector<Sprite> heartSprites(player.getPlayerLives());
 Input input;
 RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
 
-//Vectors de coordonnées de hitboxes x/y
-Vector2f ballTopLeft;
-Vector2f ballTopRight;
-Vector2f ballBottomLeft;
-Vector2f ballBottomRight;
-
-
 
 //Prototypes de fonctions
 void loadBaseTexture();
@@ -68,6 +59,5 @@ void ballMovement();
 void collisionManagement();
 void setHearts();
 void playerLifeLossManagement();
-void setLevelText(string str);
 void centerText(Text text);
-void setGameOverText(string str);
+void prepareStartingTexts();
