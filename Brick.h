@@ -50,6 +50,7 @@ public:
 	void movePlayer(std::string direction);
 	float getPlayerSpeed();
 	int getPlayerLives();
+	void setPlayerLives(int nbr);
 	void playerLosesLife();
 
 private:

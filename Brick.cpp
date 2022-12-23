@@ -8,8 +8,8 @@ Brick::Brick()
 	m_spriteHeight = 128;
 	m_spriteWidth = 384;
 	m_spriteScale = 0.4;
-	m_xOffset = 0;
-	m_yOffset = 130;
+	m_xOffset = 772;
+	m_yOffset = 390;
 	loadTexture("ressources/Breakout_Tile_Free.png");
 	m_brickWidth = m_spriteWidth * m_spriteScale;
 	m_brickHeight = m_spriteHeight * m_spriteScale;
@@ -26,7 +26,6 @@ Brick::Brick(int xOffset, int yOffset, int width, int height, float scale)
 	loadTexture("ressources/Breakout_Tile_Free.png");
 	m_brickWidth = m_spriteWidth * m_spriteScale;
 	m_brickHeight = m_spriteHeight * m_spriteScale;
-	m_sprite.setOrigin(Vector2f(m_brickWidth, m_brickHeight));
 	m_healthPoints = 1;
 }
 
@@ -115,7 +114,8 @@ Brick::~Brick()
 Player::Player() : Brick(1158, 462, 243, 64, 0.5)
 {
 	m_playerSpeed = 5;
-	m_playerLives = 5;
+	m_playerLives = 3;
+	m_sprite.setOrigin(Vector2f(m_brickWidth, m_brickHeight));
 }
 
 void Player::movePlayer(std::string direction)
@@ -139,6 +139,11 @@ float Player::getPlayerSpeed()
 int Player::getPlayerLives()
 {
 	return m_playerLives;
+}
+
+void Player::setPlayerLives(int nbr)
+{
+	m_playerLives = nbr;
 }
 
 void Player::playerLosesLife()

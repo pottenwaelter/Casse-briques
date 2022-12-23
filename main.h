@@ -18,21 +18,26 @@ const int WIN_HEIGHT = 720;
 float playerWidth;
 float ballRadius = 12.f;
 float playerHeight;
-float xBallSpeed = 3.5;
-float yBallSpeed = 3.5;
+float xBallSpeed = 4.f;
+float yBallSpeed = 4.f;
 float xSpacing;
+int numberOfBricks = 24;
 int ballSpriteSize = 64;
 bool hasGameStarted = false;
 bool hasCollided = false;
-bool isBackspacePressed = false;
 bool isGameOver = false;
-Clock collisionClock;
+bool isTextDisplayed = false;
 int brickColumn = 0;
 int brickRow = 0;
+
+//Timers
+Clock collisionClock;
+Clock blinkingClock;
 
 //Variables de texte
 InGameText levelText;
 InGameText gameOverText;
+InGameText restartText;
 
 //Instances d'objets
 Texture spriteSheet;
@@ -42,7 +47,7 @@ Sprite playerSprite;
 Sprite ballSprite;
 RectangleShape ballRect;
 FloatRect ballHitbox;
-list<Brick> bricks(24);
+list<Brick> bricks(numberOfBricks);
 Player player;
 vector<Sprite> heartSprites(player.getPlayerLives());
 Input input;
@@ -51,6 +56,7 @@ RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
 
 //Prototypes de fonctions
 void loadBaseTexture();
+void setPlayer();
 void setBall();
 void setLevelBackground(string file);
 void checkInput();
@@ -59,5 +65,6 @@ void ballMovement();
 void collisionManagement();
 void setHearts();
 void playerLifeLossManagement();
-void centerText(Text text);
 void prepareStartingTexts();
+void restartGame();
+void setLevel();
