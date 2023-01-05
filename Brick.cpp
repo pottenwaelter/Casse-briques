@@ -8,8 +8,8 @@ Brick::Brick()
 	m_spriteHeight = 128;
 	m_spriteWidth = 384;
 	m_spriteScale = 0.4;
-	m_xOffset = 772;
-	m_yOffset = 390;
+	m_xOffset = 0;
+	m_yOffset = 130;
 	loadTexture("ressources/Breakout_Tile_Free.png");
 	m_brickWidth = m_spriteWidth * m_spriteScale;
 	m_brickHeight = m_spriteHeight * m_spriteScale;
@@ -43,6 +43,11 @@ void Brick::loadTexture(std::string text)
 int Brick::getHealthPoints()
 {
 	return m_healthPoints;
+}
+
+void Brick::setHealthPoints(int hp)
+{
+	m_healthPoints = hp;
 }
 
 void Brick::brickGetsHit()
@@ -80,6 +85,16 @@ float Brick::getYPos()
 	return m_sprite.getPosition().y;
 }
 
+int Brick::getXOffset()
+{
+	return m_xOffset;
+}
+
+int Brick::getYOffset()
+{
+	return m_yOffset;
+}
+
 int Brick::getTextRect()
 {
 	return m_sprite.getTextureRect().top;
@@ -103,6 +118,12 @@ void Brick::getBrickPosition() const
 FloatRect Brick::getHitbox()
 {
 	return m_sprite.getGlobalBounds();
+}
+
+void Brick::setSpriteOffset(int x, int y)
+{
+	m_xOffset = x;
+	m_yOffset = y;
 }
 
 Brick::~Brick()

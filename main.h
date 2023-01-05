@@ -29,6 +29,11 @@ bool isGameOver = false;
 bool isTextDisplayed = false;
 int brickColumn = 0;
 int brickRow = 0;
+int currentLevel = 1;
+
+//Offsets de sprite des niveux
+Vector2i level1Offsets(0, 130);
+Vector2i level2Offsets(772, 390);
 
 //Timers
 Clock collisionClock;
@@ -67,4 +72,5 @@ void setHearts();
 void playerLifeLossManagement();
 void prepareStartingTexts();
 void restartGame();
-void setLevel();
+void setLevel1();
+void setLevel2();

@@ -12,6 +12,7 @@ public:
 	Brick();
 	Brick(int xOffset, int yOffset, int width, int height, float scale);
 	void loadTexture(std::string text);
+	void setHealthPoints(int hp);
 	int getHealthPoints();
 	void brickGetsHit();
 	void setBrickPosition(float xPos, float yPos);
@@ -20,11 +21,14 @@ public:
 	float getBrickHeight();
 	float getXPos();
 	float getYPos();
+	int getXOffset();
+	int getYOffset();
 	int getTextRect();
 	Vector2f getScale();
 	Vector2f getOrigin();
 	FloatRect getHitbox();
 	void getBrickPosition() const;
+	void setSpriteOffset(int x, int y);
 	~Brick();
 protected: // en prévision de classe fille
 	virtual void draw(RenderTarget& target, RenderStates states) const

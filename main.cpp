@@ -5,7 +5,7 @@ int main()
     window.setFramerateLimit(60);
     xSpacing = getBrickSpacing();
     //Placement des briques
-    setLevel();
+    setLevel1();
     //Chargement des textures (sprite sheet)
     loadBaseTexture();
 
@@ -66,6 +66,7 @@ int main()
             window.draw(heartSprites[i]);
         }
         window.draw(levelText);
+        //Gestion du game over
         if (isGameOver)
         {
             window.draw(gameOverText);
@@ -83,6 +84,13 @@ int main()
                 isTextDisplayed = false;
             }
         }
+        //Changement de niveaux
+        if (bricks.empty() && currentLevel == 1)
+        {
+            setLevel2();
+            currentLevel++;
+        }
+
         //gestion des inputs
         checkInput();
     
@@ -273,16 +281,13 @@ void collisionManagement()
             {
                 if (leftCollision || rightCollision)
                 {
-                    //xBallSpeed *= -1;
-                    isXBrickCollision = true;
-
+                   isXBrickCollision = true;
                 }
             }
             else
             {
                 if (topCollision || bottomCollision)
                 {
-                    //yBallSpeed *= -1;
                     isYBrickCollision = true;
                 }
             }
@@ -370,15 +375,48 @@ void restartGame()
     heartSprites.resize(player.getPlayerLives());
     setHearts();
     bricks.clear();
+    currentLevel = 1;
     bricks.resize(24);
-    setLevel();
+    levelText.setString("LEVEL 1");
+    setLevel1();
     isGameOver = false;
 }
 
-void setLevel()
+void setLevel1()
 {
     for (auto it = bricks.begin(); it != bricks.end(); ++it)
     {
+        it->setBrickHealthPoints(1);
+        if (it->getXOffset() != level1Offsets.x && it->getYOffset() != level1Offsets.y)
+        {
+            it->setSpriteOffset(level1Offsets.x, level1Offsets.y);
+        }
+        if (brickColumn < 6)
+        {
+            it->setBrickPosition(xSpacing + brickColumn * it->getBrickWidth(), 100 + brickRow * it->getBrickHeight());
+            brickColumn++;
+        }
+        if (brickColumn == 6)
+        {
+            brickColumn = 0;
+            brickRow++;
+        }
+    }
+    brickColumn = brickRow = 0;
+}
+
+void setLevel2()
+{
+    hasGameStarted = false;
+    setPlayer();
+    setBall();
+    bricks.resize(24);
+    levelText.setString("LEVEL 2");
+
+    for (auto it = bricks.begin(); it != bricks.end(); ++it)
+    {
+        it->setBrickHealthPoints(2);
+        it->setSpriteOffset(level2Offsets.x, level2Offsets.y);
         if (brickColumn < 6)
         {
             it->setBrickPosition(xSpacing + brickColumn * it->getBrickWidth(), 100 + brickRow * it->getBrickHeight());
