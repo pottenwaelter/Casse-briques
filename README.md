@@ -1,13 +1,11 @@
 # Casse-briques
 Classic brick breaker game in C++/SFML
 
+Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=34297">Pixabay</a>
+
 //TOFIX
-- Brick texture popping out when another brick gets destroyed
+- Level generation glitch
 
 //TODO
 - Better ball movement
-- Make several levels
 - Add power-ups
-- Make different types of bricks with different health counts / looks
-- Make it prettier
-- Add sound effects
