@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <string>
 #include <iostream>
 #include <cmath>
@@ -57,6 +58,10 @@ Player player;
 vector<Sprite> heartSprites(player.getPlayerLives());
 Input input;
 RenderWindow window(VideoMode(WIN_WIDTH, WIN_HEIGHT), "Casse-briques");
+
+//Effets sonores
+SoundBuffer sBufferCollision;
+Sound collisionSound;
 
 
 //Prototypes de fonctions

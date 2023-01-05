@@ -12,6 +12,10 @@ int main()
     //Chargement du background du niveau
     setLevelBackground("ressources/backgrounds/sunset.jpg");
 
+    //Chargement du son
+    sBufferCollision.loadFromFile("ressources/Sounds/plastic-hit(3).wav");
+    collisionSound.setBuffer(sBufferCollision);
+
     //Placement du joueur
     setPlayer();
     //Initialisation et placement du sprite de la balle
@@ -257,7 +261,8 @@ void collisionManagement()
     for (auto it = bricks.begin(); it != bricks.end();)
     {
         if (ballHitbox.intersects(it->getHitbox()))
-        {               
+        {   
+            collisionSound.play();
             //On voit à quel point la balle a une intersection avec la brique dans chaque direction
             float leftOverlap = ballHitbox.left + ballHitbox.width - it->getHitbox().left;
             float rightOverlap = it->getHitbox().left + it->getHitbox().width - ballHitbox.left;
