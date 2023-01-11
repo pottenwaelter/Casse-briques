@@ -40,6 +40,11 @@ void Brick::loadTexture(std::string text)
 	m_sprite.setScale(m_spriteScale, m_spriteScale);
 }
 
+void Brick::setNewTexture()
+{
+	m_sprite.setTextureRect(IntRect(m_xOffset, m_yOffset, m_spriteWidth, m_spriteHeight));
+}
+
 int Brick::getHealthPoints()
 {
 	return m_healthPoints;

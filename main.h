@@ -31,6 +31,7 @@ bool isTextDisplayed = false;
 int brickColumn = 0;
 int brickRow = 0;
 int currentLevel = 1;
+int numberOfPowerUps = 0;
 
 //Offsets de sprite des niveux
 Vector2i level1Offsets(0, 130);
@@ -79,3 +80,4 @@ void prepareStartingTexts();
 void restartGame();
 void setLevel1();
 void setLevel2();
+void setPowerUps(int number);

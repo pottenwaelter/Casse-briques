@@ -88,6 +88,7 @@ int main()
                 isTextDisplayed = false;
             }
         }
+
         //Changement de niveaux
         if (bricks.empty() && currentLevel == 1)
         {
@@ -258,6 +259,7 @@ void collisionManagement()
        
     bool isYBrickCollision = false;
     bool isXBrickCollision = false;
+    bool brickHit = false;
     for (auto it = bricks.begin(); it != bricks.end();)
     {
         if (ballHitbox.intersects(it->getHitbox()))
@@ -297,7 +299,10 @@ void collisionManagement()
                 }
             }
 
+            
             it->brickGetsHit();
+            
+            //cout << it->getHealthPoints() << endl;
             if (it->getHealthPoints() == 0)
             {
                 it = bricks.erase(it);
@@ -391,10 +396,11 @@ void setLevel1()
 {
     for (auto it = bricks.begin(); it != bricks.end(); ++it)
     {
-        it->setBrickHealthPoints(1);
+        it->setBrickHealthPoints(5);
         if (it->getXOffset() != level1Offsets.x && it->getYOffset() != level1Offsets.y)
         {
             it->setSpriteOffset(level1Offsets.x, level1Offsets.y);
+            it->setNewTexture();
         }
         if (brickColumn < 6)
         {
@@ -422,6 +428,7 @@ void setLevel2()
     {
         it->setBrickHealthPoints(2);
         it->setSpriteOffset(level2Offsets.x, level2Offsets.y);
+        it->setNewTexture();
         if (brickColumn < 6)
         {
             it->setBrickPosition(xSpacing + brickColumn * it->getBrickWidth(), 100 + brickRow * it->getBrickHeight());
@@ -434,4 +441,9 @@ void setLevel2()
         }
     }
     brickColumn = brickRow = 0;
+}
+
+void setPowerUps(int number)
+{
+
 }

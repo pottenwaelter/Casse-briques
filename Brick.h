@@ -12,6 +12,7 @@ public:
 	Brick();
 	Brick(int xOffset, int yOffset, int width, int height, float scale);
 	void loadTexture(std::string text);
+	void setNewTexture();
 	void setHealthPoints(int hp);
 	int getHealthPoints();
 	void brickGetsHit();
