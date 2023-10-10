@@ -14,6 +14,10 @@ Then navigate to the extracted folder and launch the executable Casse-briques.ex
 ## Controls
 
 **Space**: Start game / launch ball from paddle
+
 **Q**: Move left
+
 **D**: Move right
+
 **Escape**: Quit game
+
